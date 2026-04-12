@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -12,7 +11,7 @@ public class SwitchTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        void ThenAction(Person person) => person.Should().BeEquivalentTo(errorOrPerson.Value);
+        void ThenAction(Person person) => person.ShouldBe(errorOrPerson.Value);
         void ElsesAction(IReadOnlyList<Error> _) => throw new Exception("Should not be called");
 
         // Act
@@ -21,7 +20,7 @@ public class SwitchTests
             ElsesAction);
 
         // Assert
-        action.Should().NotThrow();
+        Should.NotThrow(action);
     }
 
     [Fact]
@@ -30,7 +29,7 @@ public class SwitchTests
         // Arrange
         ErrorOr<Person> errorOrPerson = new List<Error> { Error.Validation(), Error.Conflict() };
         void ThenAction(Person _) => throw new Exception("Should not be called");
-        void ElsesAction(IReadOnlyList<Error> errors) => errors.Should().BeEquivalentTo(errorOrPerson.Errors);
+        void ElsesAction(IReadOnlyList<Error> errors) => errors.ShouldBe(errorOrPerson.Errors, ignoreOrder: true);
 
         // Act
         Action action = () => errorOrPerson.Switch(
@@ -38,7 +37,7 @@ public class SwitchTests
             ElsesAction);
 
         // Assert
-        action.Should().NotThrow();
+        Should.NotThrow(action);
     }
 
     [Fact]
@@ -46,7 +45,7 @@ public class SwitchTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        void ThenAction(Person person) => person.Should().BeEquivalentTo(errorOrPerson.Value);
+        void ThenAction(Person person) => person.ShouldBe(errorOrPerson.Value);
         void OnFirstErrorAction(Error _) => throw new Exception("Should not be called");
 
         // Act
@@ -55,7 +54,7 @@ public class SwitchTests
             OnFirstErrorAction);
 
         // Assert
-        action.Should().NotThrow();
+        Should.NotThrow(action);
     }
 
     [Fact]
@@ -65,8 +64,10 @@ public class SwitchTests
         ErrorOr<Person> errorOrPerson = new List<Error> { Error.Validation(), Error.Conflict() };
         void ThenAction(Person _) => throw new Exception("Should not be called");
         void OnFirstErrorAction(Error errors)
-            => errors.Should().BeEquivalentTo(errorOrPerson.Errors[0])
-                .And.BeEquivalentTo(errorOrPerson.FirstError);
+        {
+            errors.ShouldBe(errorOrPerson.Errors[0]);
+            errors.ShouldBe(errorOrPerson.FirstError);
+        }
 
         // Act
         Action action = () => errorOrPerson.SwitchFirst(
@@ -74,7 +75,7 @@ public class SwitchTests
             OnFirstErrorAction);
 
         // Assert
-        action.Should().NotThrow();
+        Should.NotThrow(action);
     }
 
     [Fact]
@@ -82,7 +83,7 @@ public class SwitchTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        void ThenAction(Person person) => person.Should().BeEquivalentTo(errorOrPerson.Value);
+        void ThenAction(Person person) => person.ShouldBe(errorOrPerson.Value);
         void OnFirstErrorAction(Error _) => throw new Exception("Should not be called");
 
         // Act
@@ -91,7 +92,7 @@ public class SwitchTests
             .SwitchFirst(ThenAction, OnFirstErrorAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -99,7 +100,7 @@ public class SwitchTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        void ThenAction(Person person) => person.Should().BeEquivalentTo(errorOrPerson.Value);
+        void ThenAction(Person person) => person.ShouldBe(errorOrPerson.Value);
         void ElsesAction(IReadOnlyList<Error> _) => throw new Exception("Should not be called");
 
         // Act
@@ -108,6 +109,6 @@ public class SwitchTests
             .Switch(ThenAction, ElsesAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 }
