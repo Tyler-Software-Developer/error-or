@@ -3,7 +3,9 @@
 // It's designed to be published with Native AOT and will fail to compile if any AOT-incompatible
 // code patterns are detected.
 
-using ErrorOr;
+using TylerSoftware.ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+using TylerSoftware.ErrorOr.Results;
 
 Console.WriteLine("ErrorOr AOT Compatibility Test");
 Console.WriteLine("==============================");
