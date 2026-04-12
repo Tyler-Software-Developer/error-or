@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -14,7 +13,7 @@ public class MatchAsyncTests
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
         Task<string> ThenAction(Person person)
         {
-            person.Should().BeEquivalentTo(errorOrPerson.Value);
+            person.ShouldBe(errorOrPerson.Value);
             return Task.FromResult("Nice");
         }
 
@@ -26,7 +25,8 @@ public class MatchAsyncTests
             ElsesAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class MatchAsyncTests
 
         Task<string> ElsesAction(IReadOnlyList<Error> errors)
         {
-            errors.Should().BeEquivalentTo(errorOrPerson.Errors);
+            errors.ShouldBe(errorOrPerson.Errors);
             return Task.FromResult("Nice");
         }
 
@@ -48,7 +48,8 @@ public class MatchAsyncTests
             ElsesAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 
     [Fact]
@@ -58,7 +59,7 @@ public class MatchAsyncTests
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
         Task<string> ThenAction(Person person)
         {
-            person.Should().BeEquivalentTo(errorOrPerson.Value);
+            person.ShouldBe(errorOrPerson.Value);
             return Task.FromResult("Nice");
         }
 
@@ -70,7 +71,8 @@ public class MatchAsyncTests
             OnFirstErrorAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 
     [Fact]
@@ -81,8 +83,8 @@ public class MatchAsyncTests
         Task<string> ThenAction(Person _) => throw new Exception("Should not be called");
         Task<string> OnFirstErrorAction(Error errors)
         {
-            errors.Should().BeEquivalentTo(errorOrPerson.Errors[0])
-                .And.BeEquivalentTo(errorOrPerson.FirstError);
+            errors.ShouldBe(errorOrPerson.Errors[0]);
+            errors.ShouldBe(errorOrPerson.FirstError);
 
             return Task.FromResult("Nice");
         }
@@ -93,7 +95,8 @@ public class MatchAsyncTests
             OnFirstErrorAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 
     [Fact]
@@ -104,8 +107,8 @@ public class MatchAsyncTests
         Task<string> ThenAction(Person _) => throw new Exception("Should not be called");
         Task<string> OnFirstErrorAction(Error errors)
         {
-            errors.Should().BeEquivalentTo(errorOrPerson.Errors[0])
-                .And.BeEquivalentTo(errorOrPerson.FirstError);
+            errors.ShouldBe(errorOrPerson.Errors[0]);
+            errors.ShouldBe(errorOrPerson.FirstError);
 
             return Task.FromResult("Nice");
         }
@@ -116,7 +119,8 @@ public class MatchAsyncTests
             .MatchFirstAsync(ThenAction, OnFirstErrorAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 
     [Fact]
@@ -128,7 +132,7 @@ public class MatchAsyncTests
 
         Task<string> ElsesAction(IReadOnlyList<Error> errors)
         {
-            errors.Should().BeEquivalentTo(errorOrPerson.Errors);
+            errors.ShouldBe(errorOrPerson.Errors);
             return Task.FromResult("Nice");
         }
 
@@ -138,6 +142,7 @@ public class MatchAsyncTests
             .MatchAsync(ThenAction, ElsesAction);
 
         // Assert
-        (await action.Should().NotThrowAsync()).Subject.Should().Be("Nice");
+        var result = await action();
+        result.ShouldBe("Nice");
     }
 }
