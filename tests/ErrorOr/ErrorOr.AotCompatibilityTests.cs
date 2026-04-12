@@ -1,7 +1,6 @@
-namespace Tests;
-
 using ErrorOr;
-using FluentAssertions;
+
+namespace Tests;
 
 /// <summary>
 /// Tests that verify AOT (Ahead-of-Time) compilation compatibility.
@@ -20,19 +19,19 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<DateTime> errorOrDateTime = DateTime.UtcNow;
 
         // Assert
-        errorOrInt.IsError.Should().BeFalse();
-        errorOrInt.Value.Should().Be(42);
+        errorOrInt.IsError.ShouldBeFalse();
+        errorOrInt.Value.ShouldBe(42);
 
-        errorOrDouble.IsError.Should().BeFalse();
-        errorOrDouble.Value.Should().Be(3.14);
+        errorOrDouble.IsError.ShouldBeFalse();
+        errorOrDouble.Value.ShouldBe(3.14);
 
-        errorOrBool.IsError.Should().BeFalse();
-        errorOrBool.Value.Should().BeTrue();
+        errorOrBool.IsError.ShouldBeFalse();
+        errorOrBool.Value.ShouldBeTrue();
 
-        errorOrGuid.IsError.Should().BeFalse();
-        errorOrGuid.Value.Should().NotBeEmpty();
+        errorOrGuid.IsError.ShouldBeFalse();
+        errorOrGuid.Value.ShouldNotBe(Guid.Empty);
 
-        errorOrDateTime.IsError.Should().BeFalse();
+        errorOrDateTime.IsError.ShouldBeFalse();
     }
 
     [Fact]
@@ -44,14 +43,14 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<object> errorOrObject = new object();
 
         // Assert
-        errorOrString.IsError.Should().BeFalse();
-        errorOrString.Value.Should().Be("test");
+        errorOrString.IsError.ShouldBeFalse();
+        errorOrString.Value.ShouldBe("test");
 
-        errorOrList.IsError.Should().BeFalse();
-        errorOrList.Value.Should().HaveCount(3);
+        errorOrList.IsError.ShouldBeFalse();
+        errorOrList.Value.Count.ShouldBe(3);
 
-        errorOrObject.IsError.Should().BeFalse();
-        errorOrObject.Value.Should().NotBeNull();
+        errorOrObject.IsError.ShouldBeFalse();
+        errorOrObject.Value.ShouldNotBeNull();
     }
 
     [Fact]
@@ -68,14 +67,14 @@ public class ErrorOrAotCompatibilityTests
         var custom = Error.Custom(100, "code", "desc");
 
         // Assert
-        failure.Type.Should().Be(ErrorType.Failure);
-        unexpected.Type.Should().Be(ErrorType.Unexpected);
-        validation.Type.Should().Be(ErrorType.Validation);
-        conflict.Type.Should().Be(ErrorType.Conflict);
-        notFound.Type.Should().Be(ErrorType.NotFound);
-        unauthorized.Type.Should().Be(ErrorType.Unauthorized);
-        forbidden.Type.Should().Be(ErrorType.Forbidden);
-        custom.NumericType.Should().Be(100);
+        failure.Type.ShouldBe(ErrorType.Failure);
+        unexpected.Type.ShouldBe(ErrorType.Unexpected);
+        validation.Type.ShouldBe(ErrorType.Validation);
+        conflict.Type.ShouldBe(ErrorType.Conflict);
+        notFound.Type.ShouldBe(ErrorType.NotFound);
+        unauthorized.Type.ShouldBe(ErrorType.Unauthorized);
+        forbidden.Type.ShouldBe(ErrorType.Forbidden);
+        custom.NumericType.ShouldBe(100);
     }
 
     [Fact]
@@ -93,11 +92,11 @@ public class ErrorOrAotCompatibilityTests
         var error = Error.Validation("code", "desc", metadata);
 
         // Assert
-        error.Metadata.Should().NotBeNull();
-        error.Metadata.Should().HaveCount(3);
-        error.Metadata!["key1"].Should().Be("value1");
-        error.Metadata!["key2"].Should().Be(42);
-        error.Metadata!["key3"].Should().Be(true);
+        error.Metadata.ShouldNotBeNull();
+        error.Metadata.Count.ShouldBe(3);
+        error.Metadata!["key1"].ShouldBe("value1");
+        error.Metadata!["key2"].ShouldBe(42);
+        error.Metadata!["key3"].ShouldBe(true);
     }
 
     [Fact]
@@ -117,8 +116,8 @@ public class ErrorOrAotCompatibilityTests
             onError: e => $"Errors: {e.Count}");
 
         // Assert
-        valueMatchResult.Should().Be("Value: 42");
-        errorMatchResult.Should().Be("Errors: 1");
+        valueMatchResult.ShouldBe("Value: 42");
+        errorMatchResult.ShouldBe("Errors: 1");
     }
 
     [Fact]
@@ -134,8 +133,8 @@ public class ErrorOrAotCompatibilityTests
             .Then(v => $"Result: {v}");
 
         // Assert
-        chainedResult.IsError.Should().BeFalse();
-        chainedResult.Value.Should().Be("Result: 25");
+        chainedResult.IsError.ShouldBeFalse();
+        chainedResult.Value.ShouldBe("Result: 25");
     }
 
     [Fact]
@@ -149,8 +148,8 @@ public class ErrorOrAotCompatibilityTests
         var elseFunc = errorResult.Else(errors => errors.Count * 10);
 
         // Assert
-        elseValue.Value.Should().Be(42);
-        elseFunc.Value.Should().Be(10);
+        elseValue.Value.ShouldBe(42);
+        elseFunc.Value.ShouldBe(10);
     }
 
     [Fact]
@@ -164,11 +163,11 @@ public class ErrorOrAotCompatibilityTests
         var passedResult = result.FailIf(v => v > 100, Error.Validation("TooLarge", "Value is too large"));
 
         // Assert
-        failedResult.IsError.Should().BeTrue();
-        failedResult.FirstError.Code.Should().Be("TooLarge");
+        failedResult.IsError.ShouldBeTrue();
+        failedResult.FirstError.Code.ShouldBe("TooLarge");
 
-        passedResult.IsError.Should().BeFalse();
-        passedResult.Value.Should().Be(10);
+        passedResult.IsError.ShouldBeFalse();
+        passedResult.Value.ShouldBe(10);
     }
 
     [Fact]
@@ -190,8 +189,8 @@ public class ErrorOrAotCompatibilityTests
             onError: e => switchedErrorCount = e.Count);
 
         // Assert
-        switchedValue.Should().Be(42);
-        switchedErrorCount.Should().Be(1);
+        switchedValue.ShouldBe(42);
+        switchedErrorCount.ShouldBe(1);
     }
 
     [Fact]
@@ -204,17 +203,17 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<Deleted> deleted = Result.Deleted;
 
         // Assert
-        success.IsError.Should().BeFalse();
-        success.Value.Should().Be(Result.Success);
+        success.IsError.ShouldBeFalse();
+        success.Value.ShouldBe(Result.Success);
 
-        created.IsError.Should().BeFalse();
-        created.Value.Should().Be(Result.Created);
+        created.IsError.ShouldBeFalse();
+        created.Value.ShouldBe(Result.Created);
 
-        updated.IsError.Should().BeFalse();
-        updated.Value.Should().Be(Result.Updated);
+        updated.IsError.ShouldBeFalse();
+        updated.Value.ShouldBe(Result.Updated);
 
-        deleted.IsError.Should().BeFalse();
-        deleted.Value.Should().Be(Result.Deleted);
+        deleted.IsError.ShouldBeFalse();
+        deleted.Value.ShouldBe(Result.Deleted);
     }
 
     [Fact]
@@ -224,8 +223,8 @@ public class ErrorOrAotCompatibilityTests
         var result = ErrorOrFactory.From("test value");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("test value");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("test value");
     }
 
     [Fact]
@@ -243,10 +242,10 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<int> result = errors;
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(3);
-        result.FirstError.Code.Should().Be("Error1");
-        result.ErrorsOrEmptyList.Should().HaveCount(3);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(3);
+        result.FirstError.Code.ShouldBe("Error1");
+        result.ErrorsOrEmptyList.Count.ShouldBe(3);
     }
 
     [Fact]
@@ -258,9 +257,9 @@ public class ErrorOrAotCompatibilityTests
         var error3 = Error.Validation("other", "desc");
 
         // Assert
-        error1.Should().Be(error2);
-        error1.Should().NotBe(error3);
-        error1.GetHashCode().Should().Be(error2.GetHashCode());
+        error1.ShouldBe(error2);
+        error1.ShouldNotBe(error3);
+        error1.GetHashCode().ShouldBe(error2.GetHashCode());
     }
 
     [Fact]
@@ -270,8 +269,8 @@ public class ErrorOrAotCompatibilityTests
         var result = "test".ToErrorOr();
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("test");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("test");
     }
 
     [Fact]
@@ -287,9 +286,9 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<Point> result = point;
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.X.Should().Be(10);
-        result.Value.Y.Should().Be(20);
+        result.IsError.ShouldBeFalse();
+        result.Value.X.ShouldBe(10);
+        result.Value.Y.ShouldBe(20);
     }
 
     [Fact]
@@ -305,8 +304,8 @@ public class ErrorOrAotCompatibilityTests
         ErrorOr<Dictionary<string, List<int>>> result = nested;
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value["key"].Should().HaveCount(3);
+        result.IsError.ShouldBeFalse();
+        result.Value["key"].Count.ShouldBe(3);
     }
 
     private readonly record struct Point(int X, int Y);
