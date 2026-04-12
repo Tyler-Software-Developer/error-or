@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -18,8 +17,8 @@ public class ThenTests
             .Then(Convert.ToString);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("10");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("10");
     }
 
     [Fact]
@@ -35,8 +34,8 @@ public class ThenTests
             .ThenDo(str => { _ = 5; });
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(5);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(5);
     }
 
     [Fact]
@@ -53,8 +52,8 @@ public class ThenTests
             .Then(Convert.ToString);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().BeEquivalentTo(errorOrString.FirstError);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(errorOrString.FirstError);
     }
 
     [Fact]
@@ -73,8 +72,8 @@ public class ThenTests
             .ThenDo(num => { _ = 5; });
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("10");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("10");
     }
 
     [Fact]
@@ -89,7 +88,7 @@ public class ThenTests
             .Then(Convert.ToString);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().BeEquivalentTo(errorOrString.FirstError);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(errorOrString.FirstError);
     }
 }
