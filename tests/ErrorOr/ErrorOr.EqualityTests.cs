@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -54,7 +53,7 @@ public sealed class ErrorOrEqualityTests
 
         var result = errorOrPerson1.Equals(errorOrPerson2);
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -75,7 +74,7 @@ public sealed class ErrorOrEqualityTests
 
         var result = errorOrPerson1.Equals(errorOrPerson2);
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Theory]
@@ -87,7 +86,7 @@ public sealed class ErrorOrEqualityTests
 
         var result = errorOrPerson1.Equals(errorOrPerson2);
 
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Theory]
@@ -99,7 +98,7 @@ public sealed class ErrorOrEqualityTests
 
         var result = errorOrPerson1.Equals(errorOrPerson2);
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Theory]
@@ -111,7 +110,7 @@ public sealed class ErrorOrEqualityTests
 
         var result = errorOrPerson1.Equals(errorOrPerson2);
 
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Theory]
@@ -124,7 +123,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.Should().Be(hashCode2);
+        hashCode1.ShouldBe(hashCode2);
     }
 
     [Theory]
@@ -139,7 +138,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.Should().NotBe(hashCode2);
+        hashCode1.ShouldNotBe(hashCode2);
     }
 
     [Fact]
@@ -161,7 +160,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.Should().Be(hashCode2);
+        hashCode1.ShouldBe(hashCode2);
     }
 
     [Theory]
@@ -176,7 +175,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.Should().NotBe(hashCode2);
+        hashCode1.ShouldNotBe(hashCode2);
     }
 
     [Fact]
@@ -190,7 +189,7 @@ public sealed class ErrorOrEqualityTests
         var result = errorOrValue.Equals(errorOrError);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -204,6 +203,6 @@ public sealed class ErrorOrEqualityTests
         var result = errorOrError.Equals(errorOrValue);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 }

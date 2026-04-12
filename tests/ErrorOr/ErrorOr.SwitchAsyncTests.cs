@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -12,7 +11,12 @@ public class SwitchAsyncTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        Task ThenAction(Person person) => Task.FromResult(person.Should().BeEquivalentTo(errorOrPerson.Value));
+        Task ThenAction(Person person)
+        {
+            person.ShouldBe(errorOrPerson.Value);
+            return Task.CompletedTask;
+        }
+
         Task ElsesAction(IReadOnlyList<Error> _) => throw new Exception("Should not be called");
 
         // Act
@@ -21,7 +25,7 @@ public class SwitchAsyncTests
             ElsesAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -30,7 +34,11 @@ public class SwitchAsyncTests
         // Arrange
         ErrorOr<Person> errorOrPerson = new List<Error> { Error.Validation(), Error.Conflict() };
         Task ThenAction(Person _) => throw new Exception("Should not be called");
-        Task ElsesAction(IReadOnlyList<Error> errors) => Task.FromResult(errors.Should().BeEquivalentTo(errorOrPerson.Errors));
+        Task ElsesAction(IReadOnlyList<Error> errors)
+        {
+            errors.ShouldBe(errorOrPerson.Errors, ignoreOrder: true);
+            return Task.CompletedTask;
+        }
 
         // Act
         Func<Task> action = async () => await errorOrPerson.SwitchAsync(
@@ -38,7 +46,7 @@ public class SwitchAsyncTests
             ElsesAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -46,7 +54,12 @@ public class SwitchAsyncTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        Task ThenAction(Person person) => Task.FromResult(person.Should().BeEquivalentTo(errorOrPerson.Value));
+        Task ThenAction(Person person)
+        {
+            person.ShouldBe(errorOrPerson.Value);
+            return Task.CompletedTask;
+        }
+
         Task OnFirstErrorAction(Error _) => throw new Exception("Should not be called");
 
         // Act
@@ -55,7 +68,7 @@ public class SwitchAsyncTests
             OnFirstErrorAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -65,8 +78,11 @@ public class SwitchAsyncTests
         ErrorOr<Person> errorOrPerson = new List<Error> { Error.Validation(), Error.Conflict() };
         Task ThenAction(Person _) => throw new Exception("Should not be called");
         Task OnFirstErrorAction(Error errors)
-            => Task.FromResult(errors.Should().BeEquivalentTo(errorOrPerson.Errors[0])
-                .And.BeEquivalentTo(errorOrPerson.FirstError));
+        {
+            errors.ShouldBe(errorOrPerson.Errors[0]);
+            errors.ShouldBe(errorOrPerson.FirstError);
+            return Task.CompletedTask;
+        }
 
         // Act
         Func<Task> action = async () => await errorOrPerson.SwitchFirstAsync(
@@ -74,7 +90,7 @@ public class SwitchAsyncTests
             OnFirstErrorAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -82,7 +98,12 @@ public class SwitchAsyncTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        Task ThenAction(Person person) => Task.FromResult(person.Should().BeEquivalentTo(errorOrPerson.Value));
+        Task ThenAction(Person person)
+        {
+            person.ShouldBe(errorOrPerson.Value);
+            return Task.CompletedTask;
+        }
+
         Task OnFirstErrorAction(Error _) => throw new Exception("Should not be called");
 
         // Act
@@ -93,7 +114,7 @@ public class SwitchAsyncTests
                 OnFirstErrorAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 
     [Fact]
@@ -101,7 +122,12 @@ public class SwitchAsyncTests
     {
         // Arrange
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
-        Task ThenAction(Person person) => Task.FromResult(person.Should().BeEquivalentTo(errorOrPerson.Value));
+        Task ThenAction(Person person)
+        {
+            person.ShouldBe(errorOrPerson.Value);
+            return Task.CompletedTask;
+        }
+
         Task ElsesAction(IReadOnlyList<Error> _) => throw new Exception("Should not be called");
 
         // Act
@@ -110,6 +136,6 @@ public class SwitchAsyncTests
             .SwitchAsync(ThenAction, ElsesAction);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await Should.NotThrowAsync(action);
     }
 }
