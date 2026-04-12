@@ -1,7 +1,6 @@
-namespace Tests;
-
 using ErrorOr;
-using FluentAssertions;
+
+namespace Tests;
 
 public class ErrorOrInstantiationTests
 {
@@ -17,8 +16,8 @@ public class ErrorOrInstantiationTests
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
         // Assert
-        errorOrPerson.IsError.Should().BeFalse();
-        errorOrPerson.Value.Should().BeSameAs(value);
+        errorOrPerson.IsError.ShouldBeFalse();
+        errorOrPerson.Value.ShouldBeSameAs(value);
     }
 
     [Fact]
@@ -28,11 +27,8 @@ public class ErrorOrInstantiationTests
         IEnumerable<string> value = ["value"];
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
-        // Act
-        Func<List<Error>> errors = () => errorOrPerson.Errors;
-
         // Assert
-        errors.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.Errors);
     }
 
     [Fact]
@@ -46,7 +42,7 @@ public class ErrorOrInstantiationTests
         List<Error> errors = errorOrPerson.ErrorsOrEmptyList;
 
         // Assert
-        errors.Should().BeEmpty();
+        errors.ShouldBeEmpty();
     }
 
     [Fact]
@@ -56,11 +52,8 @@ public class ErrorOrInstantiationTests
         IEnumerable<string> value = ["value"];
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
-        // Act
-        Func<Error> action = () => errorOrPerson.FirstError;
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.FirstError);
     }
 
     [Fact]
@@ -73,8 +66,8 @@ public class ErrorOrInstantiationTests
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
         // Assert
-        errorOrPerson.IsError.Should().BeFalse();
-        errorOrPerson.Value.Should().BeSameAs(value);
+        errorOrPerson.IsError.ShouldBeFalse();
+        errorOrPerson.Value.ShouldBeSameAs(value);
     }
 
     [Fact]
@@ -84,11 +77,8 @@ public class ErrorOrInstantiationTests
         IEnumerable<string> value = ["value"];
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
-        // Act
-        Func<List<Error>> action = () => errorOrPerson.Errors;
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.Errors);
     }
 
     [Fact]
@@ -102,7 +92,7 @@ public class ErrorOrInstantiationTests
         List<Error> errors = errorOrPerson.ErrorsOrEmptyList;
 
         // Assert
-        errors.Should().BeEmpty();
+        errors.ShouldBeEmpty();
     }
 
     [Fact]
@@ -112,50 +102,46 @@ public class ErrorOrInstantiationTests
         IEnumerable<string> value = ["value"];
         ErrorOr<IEnumerable<string>> errorOrPerson = ErrorOrFactory.From(value);
 
-        // Act
-        Func<Error> action = () => errorOrPerson.FirstError;
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.FirstError);
     }
 
     [Fact]
     public void CreateFromErrorList_WhenAccessingErrors_ShouldReturnErrorList()
     {
         // Arrange
-        List<Error> errors = new() { Error.Validation("User.Name", "Name is too short") };
+        List<Error> errors = [Error.Validation("User.Name", "Name is too short")];
         ErrorOr<Person> errorOrPerson = ErrorOr<Person>.From(errors);
 
         // Act & Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.Errors.Should().ContainSingle().Which.Should().Be(errors.Single());
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.Errors.Count.ShouldBe(1);
+        errorOrPerson.Errors[0].ShouldBe(errors.Single());
     }
 
     [Fact]
     public void CreateFromErrorList_WhenAccessingErrorsOrEmptyList_ShouldReturnErrorList()
     {
         // Arrange
-        List<Error> errors = new() { Error.Validation("User.Name", "Name is too short") };
+        List<Error> errors = [Error.Validation("User.Name", "Name is too short")];
         ErrorOr<Person> errorOrPerson = ErrorOr<Person>.From(errors);
 
         // Act & Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.ErrorsOrEmptyList.Should().ContainSingle().Which.Should().Be(errors.Single());
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.ErrorsOrEmptyList.Count.ShouldBe(1);
+        errorOrPerson.ErrorsOrEmptyList[0].ShouldBe(errors.Single());
     }
 
     [Fact]
     public void CreateFromErrorList_WhenAccessingValue_ShouldThrowInvalidOperationException()
     {
         // Arrange
-        List<Error> errors = new() { Error.Validation("User.Name", "Name is too short") };
+        List<Error> errors = [Error.Validation("User.Name", "Name is too short")];
         ErrorOr<Person> errorOrPerson = ErrorOr<Person>.From(errors);
 
-        // Act
-        var act = () => errorOrPerson.Value;
-
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-           .And.Message.Should().Be("The Value property cannot be accessed when errors have been recorded. Check IsError before accessing Value.");
+        var ex = Should.Throw<InvalidOperationException>(() => errorOrPerson.Value);
+        ex.Message.ShouldBe("The Value property cannot be accessed when errors have been recorded. Check IsError before accessing Value.");
     }
 
     [Fact]
@@ -168,8 +154,8 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOr = result;
 
         // Assert
-        errorOr.IsError.Should().BeFalse();
-        errorOr.Value.Should().Be(result);
+        errorOr.IsError.ShouldBeFalse();
+        errorOr.Value.ShouldBe(result);
     }
 
     [Fact]
@@ -177,11 +163,8 @@ public class ErrorOrInstantiationTests
     {
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
 
-        // Act
-        Func<List<Error>> action = () => errorOrPerson.Errors;
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.Errors);
     }
 
     [Fact]
@@ -189,11 +172,8 @@ public class ErrorOrInstantiationTests
     {
         ErrorOr<Person> errorOrPerson = new Person("Amichai");
 
-        // Act
-        Func<Error> action = () => errorOrPerson.FirstError;
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => errorOrPerson.FirstError);
     }
 
     [Fact]
@@ -206,8 +186,8 @@ public class ErrorOrInstantiationTests
         ErrorOr<int> errorOrInt = result;
 
         // Assert
-        errorOrInt.IsError.Should().BeFalse();
-        errorOrInt.Value.Should().Be(result);
+        errorOrInt.IsError.ShouldBeFalse();
+        errorOrInt.Value.ShouldBe(result);
     }
 
     [Fact]
@@ -220,17 +200,17 @@ public class ErrorOrInstantiationTests
         ErrorOr<Updated> errorOrUpdated = Result.Updated;
 
         // Assert
-        errorOrSuccess.IsError.Should().BeFalse();
-        errorOrSuccess.Value.Should().Be(Result.Success);
+        errorOrSuccess.IsError.ShouldBeFalse();
+        errorOrSuccess.Value.ShouldBe(Result.Success);
 
-        errorOrCreated.IsError.Should().BeFalse();
-        errorOrCreated.Value.Should().Be(Result.Created);
+        errorOrCreated.IsError.ShouldBeFalse();
+        errorOrCreated.Value.ShouldBe(Result.Created);
 
-        errorOrDeleted.IsError.Should().BeFalse();
-        errorOrDeleted.Value.Should().Be(Result.Deleted);
+        errorOrDeleted.IsError.ShouldBeFalse();
+        errorOrDeleted.Value.ShouldBe(Result.Deleted);
 
-        errorOrUpdated.IsError.Should().BeFalse();
-        errorOrUpdated.Value.Should().Be(Result.Updated);
+        errorOrUpdated.IsError.ShouldBeFalse();
+        errorOrUpdated.Value.ShouldBe(Result.Updated);
     }
 
     [Fact]
@@ -243,8 +223,9 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = error;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.Errors.Should().ContainSingle().Which.Should().Be(error);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.Errors.Count.ShouldBe(1);
+        errorOrPerson.Errors[0].ShouldBe(error);
     }
 
     [Fact]
@@ -253,12 +234,9 @@ public class ErrorOrInstantiationTests
         // Arrange
         ErrorOr<Person> errorOrPerson = Error.Validation("User.Name", "Name is too short");
 
-        // Act
-        var act = () => errorOrPerson.Value;
-
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-           .And.Message.Should().Be("The Value property cannot be accessed when errors have been recorded. Check IsError before accessing Value.");
+        var ex = Should.Throw<InvalidOperationException>(() => errorOrPerson.Value);
+        ex.Message.ShouldBe("The Value property cannot be accessed when errors have been recorded. Check IsError before accessing Value.");
     }
 
     [Fact]
@@ -271,26 +249,27 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = error;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.FirstError.Should().Be(error);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.FirstError.ShouldBe(error);
     }
 
     [Fact]
     public void ImplicitCastErrorList_WhenAccessingErrors_ShouldReturnErrorList()
     {
         // Arrange
-        List<Error> errors = new()
-        {
+        List<Error> errors =
+        [
             Error.Validation("User.Name", "Name is too short"),
-            Error.Validation("User.Age", "User is too young"),
-        };
+            Error.Validation("User.Age", "User is too young")
+        ];
 
         // Act
         ErrorOr<Person> errorOrPerson = errors;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.Errors.Should().HaveCount(errors.Count).And.BeEquivalentTo(errors);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.Errors.Count.ShouldBe(errors.Count);
+        errorOrPerson.Errors.ShouldBe(errors, ignoreOrder: true);
     }
 
     [Fact]
@@ -307,26 +286,27 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = errors;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.Errors.Should().HaveCount(errors.Length).And.BeEquivalentTo(errors);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.Errors.Count.ShouldBe(errors.Length);
+        errorOrPerson.Errors.ShouldBe(errors, ignoreOrder: true);
     }
 
     [Fact]
     public void ImplicitCastErrorList_WhenAccessingFirstError_ShouldReturnFirstError()
     {
         // Arrange
-        List<Error> errors = new()
-        {
+        List<Error> errors =
+        [
             Error.Validation("User.Name", "Name is too short"),
-            Error.Validation("User.Age", "User is too young"),
-        };
+            Error.Validation("User.Age", "User is too young")
+        ];
 
         // Act
         ErrorOr<Person> errorOrPerson = errors;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.FirstError.Should().Be(errors[0]);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.FirstError.ShouldBe(errors[0]);
     }
 
     [Fact]
@@ -343,69 +323,54 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = errors;
 
         // Assert
-        errorOrPerson.IsError.Should().BeTrue();
-        errorOrPerson.FirstError.Should().Be(errors[0]);
+        errorOrPerson.IsError.ShouldBeTrue();
+        errorOrPerson.FirstError.ShouldBe(errors[0]);
     }
 
     [Fact]
     public void CreateErrorOr_WhenUsingEmptyConstructor_ShouldThrow()
     {
-        // Act
-        Func<ErrorOr<int>> action = () => new ErrorOr<int>();
-
         // Assert
-        action.Should().ThrowExactly<InvalidOperationException>();
+        Should.Throw<InvalidOperationException>(() => new ErrorOr<int>());
     }
 
     [Fact]
     public void CreateErrorOr_WhenEmptyErrorsList_ShouldThrow()
     {
-        // Act
-        Func<ErrorOr<int>> errorOrInt = () => new List<Error>();
-
         // Assert
-        var exception = errorOrInt.Should().ThrowExactly<ArgumentException>().Which;
-        exception.Message.Should().Be("Cannot create an ErrorOr<TValue> from an empty collection of errors. Provide at least one error. (Parameter 'errors')");
-        exception.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentException>(() => (ErrorOr<int>)new List<Error>());
+        ex.Message.ShouldBe("Cannot create an ErrorOr<TValue> from an empty collection of errors. Provide at least one error. (Parameter 'errors')");
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
     public void CreateErrorOr_WhenEmptyErrorsArray_ShouldThrow()
     {
-        // Act
-        Func<ErrorOr<int>> errorOrInt = () => Array.Empty<Error>();
-
         // Assert
-        var exception = errorOrInt.Should().ThrowExactly<ArgumentException>().Which;
-        exception.Message.Should().Be("Cannot create an ErrorOr<TValue> from an empty collection of errors. Provide at least one error. (Parameter 'errors')");
-        exception.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentException>(() => (ErrorOr<int>)Array.Empty<Error>());
+        ex.Message.ShouldBe("Cannot create an ErrorOr<TValue> from an empty collection of errors. Provide at least one error. (Parameter 'errors')");
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
     public void CreateErrorOr_WhenNullIsPassedAsErrorsList_ShouldThrowArgumentNullException()
     {
-        Func<ErrorOr<int>> act = () => default(List<Error>)!;
-
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentNullException>(() => (ErrorOr<int>)default(List<Error>)!);
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
     public void CreateErrorOr_WhenNullIsPassedAsErrorsArray_ShouldThrowArgumentNullException()
     {
-        Func<ErrorOr<int>> act = () => default(Error[])!;
-
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentNullException>(() => (ErrorOr<int>)default(Error[])!);
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
     public void CreateErrorOr_WhenValueIsNull_ShouldThrowArgumentNullException()
     {
-        Func<ErrorOr<int?>> act = () => default(int?);
-
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("value");
+        var ex = Should.Throw<ArgumentNullException>(() => (ErrorOr<int?>)default(int?));
+        ex.ParamName.ShouldBe("value");
     }
 
     [Fact]
@@ -419,8 +384,8 @@ public class ErrorOrInstantiationTests
         var valueObject = errorOr.ValueObject;
 
         // Assert
-        valueObject.Should().BeOfType<Person>();
-        ((Person)valueObject).Name.Should().Be("Test");
+        valueObject.ShouldBeOfType<Person>();
+        ((Person)valueObject).Name.ShouldBe("Test");
     }
 
     [Fact]
@@ -430,12 +395,9 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = Error.NotFound();
         IErrorOr errorOr = errorOrPerson;
 
-        // Act
-        Func<object> act = () => errorOr.ValueObject;
-
         // Assert
-        act.Should().ThrowExactly<InvalidOperationException>()
-           .And.Message.Should().Be("The ValueObject property cannot be accessed when errors have been recorded. Check IsError before accessing ValueObject.");
+        var ex = Should.Throw<InvalidOperationException>(() => errorOr.ValueObject);
+        ex.Message.ShouldBe("The ValueObject property cannot be accessed when errors have been recorded. Check IsError before accessing ValueObject.");
     }
 
     [Fact]
@@ -445,13 +407,10 @@ public class ErrorOrInstantiationTests
         ErrorOr<Person> errorOrPerson = new Person("Test");
         IErrorOr errorOr = errorOrPerson;
 
-        // Act
-        Func<List<Error>?> act = () => errorOr.Errors;
-
         // Assert
-        errorOr.IsError.Should().BeFalse();
-        act.Should().ThrowExactly<InvalidOperationException>()
-           .And.Message.Should().Be("The Errors property cannot be accessed when no errors have been recorded. Check IsError before accessing Errors.");
+        errorOr.IsError.ShouldBeFalse();
+        var ex = Should.Throw<InvalidOperationException>(() => errorOr.Errors);
+        ex.Message.ShouldBe("The Errors property cannot be accessed when no errors have been recorded. Check IsError before accessing Errors.");
     }
 
     [Fact]
@@ -463,8 +422,9 @@ public class ErrorOrInstantiationTests
         IErrorOr errorOr = errorOrPerson;
 
         // Act & Assert
-        errorOr.IsError.Should().BeTrue();
-        errorOr.Errors.Should().NotBeNull();
-        errorOr.Errors.Should().ContainSingle().Which.Should().Be(error);
+        errorOr.IsError.ShouldBeTrue();
+        errorOr.Errors.ShouldNotBeNull();
+        errorOr.Errors.Count.ShouldBe(1);
+        errorOr.Errors![0].ShouldBe(error);
     }
 }
