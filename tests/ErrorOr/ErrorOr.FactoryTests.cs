@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -15,8 +14,8 @@ public class FactoryTests
         var result = ErrorOrFactory.From<int>(error);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().Be(error);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(error);
     }
 
     [Fact]
@@ -33,9 +32,9 @@ public class FactoryTests
         var result = ErrorOrFactory.From<int>(errors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().BeEquivalentTo(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldBe(errors);
     }
 
     [Fact]
@@ -52,9 +51,9 @@ public class FactoryTests
         var result = ErrorOrFactory.From<int>(errors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().BeEquivalentTo(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldBe(errors);
     }
 
     [Fact]
@@ -67,8 +66,8 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<int>(valueTask);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(42);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(42);
     }
 
     [Fact]
@@ -85,8 +84,8 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<string>(GetValueAsync());
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("async result");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("async result");
     }
 
     [Fact]
@@ -100,8 +99,8 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<int>(errorTask);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().Be(error);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(error);
     }
 
     [Fact]
@@ -118,8 +117,8 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<string>(GetErrorAsync());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Code.Should().Be("Error.Validation");
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Code.ShouldBe("Error.Validation");
     }
 
     [Fact]
@@ -137,9 +136,9 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<int>(errorsTask);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().BeEquivalentTo(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldBe(errors);
     }
 
     [Fact]
@@ -160,9 +159,9 @@ public class FactoryTests
         var result = await ErrorOrFactory.FromAsync<string>(GetErrorsAsync());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors[0].Code.Should().Be("Error.Conflict");
-        result.Errors[1].Code.Should().Be("Error.Failure");
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors[0].Code.ShouldBe("Error.Conflict");
+        result.Errors[1].Code.ShouldBe("Error.Failure");
     }
 }
