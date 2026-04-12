@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr.Errors;
 
 /// <summary>
 /// Represents an error.

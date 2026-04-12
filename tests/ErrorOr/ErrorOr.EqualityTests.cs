@@ -1,6 +1,6 @@
-﻿using ErrorOr;
+﻿using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public sealed class ErrorOrEqualityTests
 {
@@ -12,30 +12,26 @@ public sealed class ErrorOrEqualityTests
         {
             {
                 // Different number of entries
-                new[]
-                {
+                [
+                    Error.Validation("User.Name", "Name is too short")
+                ],
+                [
                     Error.Validation("User.Name", "Name is too short"),
-                },
-                new[]
-                {
-                    Error.Validation("User.Name", "Name is too short"),
-                    Error.Validation("User.Age", "User is too young"),
-                }
+                    Error.Validation("User.Age", "User is too young")
+                ]
             },
             {
                 // Different errors
-                new[]
-                {
-                    Error.Validation("User.Name", "Name is too short"),
-                },
-                new[]
-                {
-                    Error.Validation("User.Age", "User is too young"),
-                }
+                [
+                    Error.Validation("User.Name", "Name is too short")
+                ],
+                [
+                    Error.Validation("User.Age", "User is too young")
+                ]
             },
         };
 
-    public static readonly TheoryData<string> Names = new() { "Amichai", "feO2x" };
+    public static readonly TheoryData<string> Names = ["Amichai", "feO2x"];
 
     public static readonly TheoryData<string, string> DifferentNames =
         new() { { "Amichai", "feO2x" }, { "Tyrion", "Cersei" } };
@@ -138,7 +134,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.ShouldNotBe(hashCode2);
+        hashCode1.ShouldNotBe<int>(hashCode2);
     }
 
     [Fact]
@@ -175,7 +171,7 @@ public sealed class ErrorOrEqualityTests
         var hashCode1 = errorOrPerson1.GetHashCode();
         var hashCode2 = errorOrPerson2.GetHashCode();
 
-        hashCode1.ShouldNotBe(hashCode2);
+        hashCode1.ShouldNotBe<int>(hashCode2);
     }
 
     [Fact]

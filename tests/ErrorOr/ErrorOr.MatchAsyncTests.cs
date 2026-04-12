@@ -1,6 +1,6 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class MatchAsyncTests
 {
@@ -115,7 +115,7 @@ public class MatchAsyncTests
 
         // Act
         Func<Task<string>> action = () => errorOrPerson
-            .ThenAsync(person => Task.FromResult(person))
+            .ThenAsync(person => Task.FromResult<Person>(person))
             .MatchFirstAsync(ThenAction, OnFirstErrorAction);
 
         // Assert
@@ -138,7 +138,7 @@ public class MatchAsyncTests
 
         // Act
         Func<Task<string>> action = () => errorOrPerson
-            .ThenAsync(person => Task.FromResult(person))
+            .ThenAsync(person => Task.FromResult<Person>(person))
             .MatchAsync(ThenAction, ElsesAction);
 
         // Assert

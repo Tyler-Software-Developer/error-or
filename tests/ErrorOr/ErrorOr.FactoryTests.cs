@@ -1,6 +1,6 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class FactoryTests
 {
@@ -148,11 +148,11 @@ public class FactoryTests
         static async Task<List<Error>> GetErrorsAsync()
         {
             await Task.Delay(1);
-            return new List<Error>
-            {
+            return
+            [
                 Error.Conflict("Error.Conflict", "Async conflict error"),
-                Error.Failure("Error.Failure", "Async failure error"),
-            };
+                Error.Failure("Error.Failure", "Async failure error")
+            ];
         }
 
         // Act

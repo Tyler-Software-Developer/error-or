@@ -1,6 +1,6 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class BuilderTests
 {
@@ -40,7 +40,7 @@ public class BuilderTests
     public void Create_WhenEmptyErrorsProvided_ShouldThrowArgumentException()
     {
         // Assert
-        var ex = Should.Throw<ArgumentException>(() => ErrorOrBuilder.Create<int>(Array.Empty<Error>()));
+        var ex = Should.Throw<ArgumentException>(() => ErrorOrBuilder.Create<int>([]));
         ex.ParamName.ShouldBe("errors");
     }
 

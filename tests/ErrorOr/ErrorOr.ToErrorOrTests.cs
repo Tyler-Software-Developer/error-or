@@ -1,7 +1,7 @@
-using ErrorOr;
-using FluentAssertions;
+using TylerSoftware.ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class ToErrorOrTests
 {
@@ -9,14 +9,14 @@ public class ToErrorOrTests
     public void ValueToErrorOr_WhenAccessingValue_ShouldReturnValue()
     {
         // Arrange
-        int value = 5;
+        const int value = 5;
 
         // Act
         ErrorOr<int> result = value.ToErrorOr();
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(value);
     }
 
     [Fact]
@@ -29,8 +29,8 @@ public class ToErrorOrTests
         ErrorOr<int> result = error.ToErrorOr<int>();
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().Be(error);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(error);
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class ToErrorOrTests
         ErrorOr<int> result = errors.ToErrorOr<int>();
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().BeEquivalentTo(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.ShouldBe(errors, ignoreOrder: true);
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public class ToErrorOrTests
 
         ErrorOr<int> result = errors.ToErrorOr<int>();
 
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().Equal(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.ShouldBe(errors);
     }
 
     [Fact]
@@ -68,8 +68,8 @@ public class ToErrorOrTests
         var result = await task.ToErrorOrAsync();
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(42);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(42);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class ToErrorOrTests
         var result = await GetValueAsync().ToErrorOrAsync();
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("async result");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("async result");
     }
 }

@@ -1,4 +1,4 @@
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr;
 
 public readonly partial record struct ErrorOr<TValue> : IErrorOr<TValue>
 {

@@ -1,7 +1,6 @@
-﻿using ErrorOr;
-using FluentAssertions;
+﻿using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.Errors;
 
 public sealed class ErrorEqualityTests
 {
@@ -42,7 +41,7 @@ public sealed class ErrorEqualityTests
 
         var result = error1.Equals(error2);
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -54,7 +53,7 @@ public sealed class ErrorEqualityTests
 
         var result = error1.Equals(error2);
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Theory]
@@ -63,7 +62,7 @@ public sealed class ErrorEqualityTests
     {
         var result = error1.Equals(error2);
 
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Theory]
@@ -81,7 +80,7 @@ public sealed class ErrorEqualityTests
         var hashCode1 = error1.GetHashCode();
         var hashCode2 = error2.GetHashCode();
 
-        hashCode1.Should().Be(hashCode2);
+        hashCode1.ShouldBe(hashCode2);
     }
 
     [Theory]
@@ -93,6 +92,6 @@ public sealed class ErrorEqualityTests
         var hashCode1 = error1.GetHashCode();
         var hashCode2 = error2.GetHashCode();
 
-        hashCode1.Should().NotBe(hashCode2);
+        hashCode1.ShouldNotBe(hashCode2);
     }
 }

@@ -1,6 +1,6 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class FailIfAsyncTests
 {
@@ -29,7 +29,7 @@ public class FailIfAsyncTests
 
         // Act
         ErrorOr<int> result = await errorOrInt
-            .ThenAsync(num => Task.FromResult(num))
+            .ThenAsync(num => Task.FromResult<int>(num))
             .FailIfAsync(num => Task.FromResult(num > 3), Error.Failure());
 
         // Assert
@@ -91,7 +91,7 @@ public class FailIfAsyncTests
 
         // Act
         ErrorOr<int> result = await errorOrInt
-            .ThenAsync(num => Task.FromResult(num))
+            .ThenAsync(num => Task.FromResult<int>(num))
             .FailIfAsync(num => Task.FromResult(num > 3), (num) => Task.FromResult(Error.Failure(description: $"{num} is greater than 3.")));
 
         // Assert

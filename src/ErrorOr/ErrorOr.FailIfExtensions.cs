@@ -1,4 +1,6 @@
-namespace ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+
+namespace TylerSoftware.ErrorOr;
 
 public static partial class ErrorOrExtensions
 {
@@ -8,7 +10,7 @@ public static partial class ErrorOrExtensions
     /// </summary>
     /// <param name="errorOr">The <see cref="ErrorOr"/> instance.</param>
     /// <param name="onValue">The function to execute if the state is a value.</param>
-    /// <param name="error">The <see cref="Error"/> to return if the given <paramref name="onValue"/> function returned true..</param>
+    /// <param name="error">The <see cref="TylerSoftware.ErrorOr.Errors.Error"/> to return if the given <paramref name="onValue"/> function returned true..</param>
     /// <typeparam name="TValue">The type of the underlying value in the <paramref name="errorOr"/>.</typeparam>
     /// <returns>The given <paramref name="error"/> if <paramref name="onValue"/> returns true; otherwise, the original <see cref="ErrorOr"/> instance.</returns>
     public static async Task<ErrorOr<TValue>> FailIf<TValue>(
@@ -46,7 +48,7 @@ public static partial class ErrorOrExtensions
     /// </summary>
     /// <param name="errorOr">The <see cref="ErrorOr"/> instance.</param>
     /// <param name="onValue">The function to execute if the statement is value.</param>
-    /// <param name="error">The <see cref="Error"/> to return if the given <paramref name="onValue"/> function returned true.</param>
+    /// <param name="error">The <see cref="TylerSoftware.ErrorOr.Errors.Error"/> to return if the given <paramref name="onValue"/> function returned true.</param>
     /// <typeparam name="TValue">The type of the underlying value in the <paramref name="errorOr"/>.</typeparam>
     /// <returns>The given <paramref name="error"/> if <paramref name="onValue"/> returns true; otherwise, the original <see cref="ErrorOr"/> instance.</returns>
     public static async Task<ErrorOr<TValue>> FailIfAsync<TValue>(

@@ -1,4 +1,6 @@
-﻿namespace ErrorOr;
+﻿using TylerSoftware.ErrorOr.Errors;
+
+namespace TylerSoftware.ErrorOr;
 
 internal static class EmptyErrors
 {

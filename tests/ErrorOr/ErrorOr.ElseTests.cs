@@ -1,7 +1,6 @@
-using ErrorOr;
-using FluentAssertions;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class ElseTests
 {
@@ -18,8 +17,8 @@ public class ElseTests
             .Else(errors => $"Error count: {errors.Count}");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -35,8 +34,8 @@ public class ElseTests
             .Else(errors => $"Error count: {errors.Count}");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("Error count: 1");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("Error count: 1");
     }
 
     [Fact]
@@ -52,8 +51,8 @@ public class ElseTests
             .Else("oh no");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -69,8 +68,8 @@ public class ElseTests
             .Else("oh no");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("oh no");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("oh no");
     }
 
     [Fact]
@@ -86,8 +85,8 @@ public class ElseTests
             .Else(Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -103,8 +102,8 @@ public class ElseTests
             .Else(Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -120,8 +119,8 @@ public class ElseTests
             .Else(errors => Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -137,8 +136,8 @@ public class ElseTests
             .Else(errors => Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -154,8 +153,8 @@ public class ElseTests
             .Else(errors => [Error.Unexpected()]);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -171,8 +170,8 @@ public class ElseTests
             .Else(errors => [Error.Unexpected()]);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -188,8 +187,8 @@ public class ElseTests
             .Else("oh no");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("oh no");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("oh no");
     }
 
     [Fact]
@@ -205,8 +204,8 @@ public class ElseTests
             .Else(errors => $"Error count: {errors.Count}");
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("Error count: 1");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("Error count: 1");
     }
 
     [Fact]
@@ -222,8 +221,8 @@ public class ElseTests
             .Else(Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -239,8 +238,8 @@ public class ElseTests
             .Else(errors => Error.Unexpected());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -256,8 +255,8 @@ public class ElseTests
             .Else(errors => [Error.Unexpected()]);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -271,9 +270,9 @@ public class ElseTests
         ErrorOr<string> result = errorOrString.ElseDo(errors => wasInvoked = true);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("success");
-        wasInvoked.Should().BeFalse();
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("success");
+        wasInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -287,10 +286,10 @@ public class ElseTests
         ErrorOr<string> result = errorOrString.ElseDo(errors => capturedErrors = errors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        capturedErrors.Should().NotBeNull();
-        capturedErrors.Should().HaveCount(1);
-        capturedErrors![0].Type.Should().Be(ErrorType.NotFound);
+        result.IsError.ShouldBeTrue();
+        capturedErrors.ShouldNotBeNull();
+        capturedErrors.Count.ShouldBe(1);
+        capturedErrors![0].Type.ShouldBe(ErrorType.NotFound);
     }
 
     [Fact]
@@ -305,9 +304,9 @@ public class ElseTests
         ErrorOr<int> result = errorOrInt.ElseDo(errors => actionCallCount++);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().Be(error);
-        actionCallCount.Should().Be(1);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(error);
+        actionCallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -321,9 +320,9 @@ public class ElseTests
             .ElseDo(errors => wasInvoked = true);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("success");
-        wasInvoked.Should().BeFalse();
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("success");
+        wasInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -337,9 +336,9 @@ public class ElseTests
             .ElseDo(errors => capturedErrors = errors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        capturedErrors.Should().NotBeNull();
-        capturedErrors.Should().HaveCount(1);
+        result.IsError.ShouldBeTrue();
+        capturedErrors.ShouldNotBeNull();
+        capturedErrors.Count.ShouldBe(1);
     }
 
     [Fact]
@@ -357,9 +356,9 @@ public class ElseTests
         });
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("success");
-        wasInvoked.Should().BeFalse();
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("success");
+        wasInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -377,10 +376,10 @@ public class ElseTests
         });
 
         // Assert
-        result.IsError.Should().BeTrue();
-        capturedErrors.Should().NotBeNull();
-        capturedErrors.Should().HaveCount(1);
-        capturedErrors![0].Type.Should().Be(ErrorType.NotFound);
+        result.IsError.ShouldBeTrue();
+        capturedErrors.ShouldNotBeNull();
+        capturedErrors.Count.ShouldBe(1);
+        capturedErrors![0].Type.ShouldBe(ErrorType.NotFound);
     }
 
     [Fact]
@@ -399,9 +398,9 @@ public class ElseTests
         });
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().Be(error);
-        actionCallCount.Should().Be(1);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(error);
+        actionCallCount.ShouldBe(1);
     }
 
     [Fact]
@@ -419,9 +418,9 @@ public class ElseTests
             });
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be("success");
-        wasInvoked.Should().BeFalse();
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("success");
+        wasInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -439,8 +438,8 @@ public class ElseTests
             });
 
         // Assert
-        result.IsError.Should().BeTrue();
-        capturedErrors.Should().NotBeNull();
-        capturedErrors.Should().HaveCount(1);
+        result.IsError.ShouldBeTrue();
+        capturedErrors.ShouldNotBeNull();
+        capturedErrors.Count.ShouldBe(1);
     }
 }

@@ -1,5 +1,5 @@
 #if !NET8_0_OR_GREATER
-namespace System.Runtime.CompilerServices;
+namespace TylerSoftware.ErrorOr;
 
 /// <summary>
 /// Specifies the type and method used to create collection instances from collection expressions.

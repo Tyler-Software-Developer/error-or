@@ -1,4 +1,4 @@
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr;
 
 public static partial class ErrorOrExtensions
 {

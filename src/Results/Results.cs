@@ -1,4 +1,4 @@
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr.Results;
 
 #pragma warning disable SA1649 // File name should match first type name
 public readonly record struct Success;

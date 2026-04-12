@@ -1,4 +1,4 @@
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr.Errors;
 
 /// <summary>
 /// Error types.

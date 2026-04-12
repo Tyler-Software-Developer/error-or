@@ -1,7 +1,6 @@
-using ErrorOr;
-using FluentAssertions;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.Errors;
 
 public class ErrorTests
 {
@@ -95,10 +94,10 @@ public class ErrorTests
 
     private static void ValidateError(Error error, ErrorType expectedErrorType)
     {
-        error.Code.Should().Be(ErrorCode);
-        error.Description.Should().Be(ErrorDescription);
-        error.Type.Should().Be(expectedErrorType);
-        error.NumericType.Should().Be((int)expectedErrorType);
-        error.Metadata.Should().BeEquivalentTo(Dictionary);
+        error.Code.ShouldBe(ErrorCode);
+        error.Description.ShouldBe(ErrorDescription);
+        error.Type.ShouldBe(expectedErrorType);
+        error.NumericType.ShouldBe((int)expectedErrorType);
+        error.Metadata.ShouldBe(Dictionary);
     }
 }

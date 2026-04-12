@@ -1,6 +1,7 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+using TylerSoftware.ErrorOr.Results;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 /// <summary>
 /// Tests that verify AOT (Ahead-of-Time) compilation compatibility.
@@ -297,7 +298,7 @@ public class ErrorOrAotCompatibilityTests
         // Arrange
         var nested = new Dictionary<string, List<int>>
         {
-            ["key"] = new List<int> { 1, 2, 3 },
+            ["key"] = [1, 2, 3],
         };
 
         // Act

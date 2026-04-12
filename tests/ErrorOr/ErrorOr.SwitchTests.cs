@@ -1,6 +1,6 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class SwitchTests
 {
@@ -88,7 +88,7 @@ public class SwitchTests
 
         // Act
         Func<Task> action = () => errorOrPerson
-            .ThenAsync(person => Task.FromResult(person))
+            .ThenAsync(person => Task.FromResult<Person>(person))
             .SwitchFirst(ThenAction, OnFirstErrorAction);
 
         // Assert
@@ -105,7 +105,7 @@ public class SwitchTests
 
         // Act
         Func<Task> action = () => errorOrPerson
-            .ThenAsync(person => Task.FromResult(person))
+            .ThenAsync(person => Task.FromResult<Person>(person))
             .Switch(ThenAction, ElsesAction);
 
         // Assert

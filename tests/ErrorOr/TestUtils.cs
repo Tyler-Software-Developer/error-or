@@ -1,6 +1,4 @@
-using ErrorOr;
-
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public static class Convert
 {

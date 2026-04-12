@@ -1,7 +1,6 @@
-using ErrorOr;
-using FluentAssertions;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class ElseAsyncTests
 {
@@ -18,8 +17,8 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult($"Error count: {errors.Count}"));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -35,8 +34,8 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult($"Error count: {errors.Count}"));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("Error count: 1");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("Error count: 1");
     }
 
     [Fact]
@@ -52,8 +51,8 @@ public class ElseAsyncTests
             .ElseAsync(Task.FromResult("oh no"));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -69,8 +68,8 @@ public class ElseAsyncTests
             .ElseAsync(Task.FromResult("oh no"));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("oh no");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("oh no");
     }
 
     [Fact]
@@ -86,8 +85,8 @@ public class ElseAsyncTests
             .ElseAsync(Task.FromResult(Error.Unexpected()));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -103,8 +102,8 @@ public class ElseAsyncTests
             .ElseAsync(Task.FromResult(Error.Unexpected()));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -120,8 +119,8 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult(Error.Unexpected()));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -137,8 +136,8 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult(Error.Unexpected()));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 
     [Fact]
@@ -154,8 +153,8 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult(new List<Error> { Error.Unexpected() }));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Unexpected);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Unexpected);
     }
 
     [Fact]
@@ -171,7 +170,7 @@ public class ElseAsyncTests
             .ElseAsync(errors => Task.FromResult(new List<Error> { Error.Unexpected() }));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(errorOrString.Value);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(errorOrString.Value);
     }
 }

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/TylerSoftware.ErrorOr.csproj" />
+  <Project Path="tests/TylerSoftware.ErrorOr.Tests.csproj" />
+</Solution>

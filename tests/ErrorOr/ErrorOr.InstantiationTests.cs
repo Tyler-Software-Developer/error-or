@@ -1,6 +1,7 @@
-using ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+using TylerSoftware.ErrorOr.Results;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class ErrorOrInstantiationTests
 {

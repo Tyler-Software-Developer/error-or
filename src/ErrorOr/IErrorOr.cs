@@ -1,4 +1,6 @@
-namespace ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+
+namespace TylerSoftware.ErrorOr;
 
 public interface IErrorOr<out TValue> : IErrorOr
 {
@@ -19,7 +21,7 @@ public interface IErrorOr
     /// <summary>
     /// Gets the list of errors.
     /// </summary>
-    List<Error>? Errors { get; }
+    List<Error> Errors { get; }
 
     /// <summary>
     /// Gets a value indicating whether the state is error.

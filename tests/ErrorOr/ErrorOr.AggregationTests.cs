@@ -1,7 +1,6 @@
-using ErrorOr;
-using FluentAssertions;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace Tests;
+namespace TylerSoftware.ErrorOr.Tests.ErrorOr;
 
 public class AggregationTests
 {
@@ -17,10 +16,10 @@ public class AggregationTests
         var result = errorOrValue.AppendErrors(error1, error2);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().Contain(error1);
-        result.Errors.Should().Contain(error2);
+        result.IsError.ShouldBe(true);
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldContain(error1);
+        result.Errors.ShouldContain(error2);
     }
 
     [Fact]
@@ -36,11 +35,11 @@ public class AggregationTests
         var result = errorOrErrors.AppendErrors(newError1, newError2);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(3);
-        result.Errors.Should().Contain(existingError);
-        result.Errors.Should().Contain(newError1);
-        result.Errors.Should().Contain(newError2);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(3);
+        result.Errors.ShouldContain(existingError);
+        result.Errors.ShouldContain(newError1);
+        result.Errors.ShouldContain(newError2);
     }
 
     [Fact]
@@ -50,12 +49,9 @@ public class AggregationTests
         ErrorOr<int> errorOrValue = 5;
         Error[]? nullErrors = null;
 
-        // Act
-        Action act = () => errorOrValue.AppendErrors(nullErrors!);
-
         // Assert
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentNullException>(() => errorOrValue.AppendErrors(nullErrors!));
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
@@ -64,12 +60,9 @@ public class AggregationTests
         // Arrange
         ErrorOr<int> errorOrValue = 5;
 
-        // Act
-        Action act = () => errorOrValue.AppendErrors(Array.Empty<Error>());
-
         // Assert
-        act.Should().ThrowExactly<ArgumentException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentException>(() => errorOrValue.AppendErrors(Array.Empty<Error>()));
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
@@ -87,9 +80,9 @@ public class AggregationTests
         var result = errorOrValue.AppendErrors(errors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().BeEquivalentTo(errors);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldBe(errors, ignoreOrder: true);
     }
 
     [Fact]
@@ -108,11 +101,11 @@ public class AggregationTests
         var result = errorOrErrors.AppendErrors(newErrors);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(3);
-        result.Errors[0].Should().Be(existingError);
-        result.Errors[1].Should().Be(newErrors[0]);
-        result.Errors[2].Should().Be(newErrors[1]);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(3);
+        result.Errors[0].ShouldBe(existingError);
+        result.Errors[1].ShouldBe(newErrors[0]);
+        result.Errors[2].ShouldBe(newErrors[1]);
     }
 
     [Fact]
@@ -122,12 +115,9 @@ public class AggregationTests
         ErrorOr<int> errorOrValue = 5;
         List<Error>? nullErrors = null;
 
-        // Act
-        Action act = () => errorOrValue.AppendErrors(nullErrors!);
-
         // Assert
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentNullException>(() => errorOrValue.AppendErrors(nullErrors!));
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
@@ -136,12 +126,9 @@ public class AggregationTests
         // Arrange
         ErrorOr<int> errorOrValue = 5;
 
-        // Act
-        Action act = () => errorOrValue.AppendErrors(new List<Error>());
-
         // Assert
-        act.Should().ThrowExactly<ArgumentException>()
-           .And.ParamName.Should().Be("errors");
+        var ex = Should.Throw<ArgumentException>(() => errorOrValue.AppendErrors(new List<Error>()));
+        ex.ParamName.ShouldBe("errors");
     }
 
     [Fact]
@@ -156,8 +143,8 @@ public class AggregationTests
         var result = ErrorOrExtensions.Combine(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(1);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(1);
     }
 
     [Fact]
@@ -174,10 +161,10 @@ public class AggregationTests
         var result = ErrorOrExtensions.Combine(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().Contain(error1);
-        result.Errors.Should().Contain(error2);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldContain(error1);
+        result.Errors.ShouldContain(error2);
     }
 
     [Fact]
@@ -195,33 +182,27 @@ public class AggregationTests
         var result = ErrorOrExtensions.Combine(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(3);
-        result.Errors.Should().Contain(error1);
-        result.Errors.Should().Contain(error2);
-        result.Errors.Should().Contain(error3);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(3);
+        result.Errors.ShouldContain(error1);
+        result.Errors.ShouldContain(error2);
+        result.Errors.ShouldContain(error3);
     }
 
     [Fact]
     public void Combine_WhenErrorsArrayIsNull_ShouldThrowArgumentNullException()
     {
-        // Act
-        Action act = () => ErrorOrExtensions.Combine<int>(null!);
-
         // Assert
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errorOrs");
+        var ex = Should.Throw<ArgumentNullException>(() => ErrorOrExtensions.Combine<int>(null!));
+        ex.ParamName.ShouldBe("errorOrs");
     }
 
     [Fact]
     public void Combine_WhenErrorsArrayIsEmpty_ShouldThrowArgumentException()
     {
-        // Act
-        Action act = () => ErrorOrExtensions.Combine(Array.Empty<ErrorOr<int>>());
-
         // Assert
-        act.Should().ThrowExactly<ArgumentException>()
-           .And.ParamName.Should().Be("errorOrs");
+        var ex = Should.Throw<ArgumentException>(() => ErrorOrExtensions.Combine(Array.Empty<ErrorOr<int>>()));
+        ex.ParamName.ShouldBe("errorOrs");
     }
 
     [Fact]
@@ -236,8 +217,8 @@ public class AggregationTests
         var result = ErrorOrExtensions.CombineAll(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(new[] { 1, 2, 3 });
     }
 
     [Fact]
@@ -254,10 +235,10 @@ public class AggregationTests
         var result = ErrorOrExtensions.CombineAll(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(2);
-        result.Errors.Should().Contain(error1);
-        result.Errors.Should().Contain(error2);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(2);
+        result.Errors.ShouldContain(error1);
+        result.Errors.ShouldContain(error2);
     }
 
     [Fact]
@@ -275,32 +256,26 @@ public class AggregationTests
         var result = ErrorOrExtensions.CombineAll(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.Errors.Should().HaveCount(3);
-        result.Errors.Should().Contain(error1);
-        result.Errors.Should().Contain(error2);
-        result.Errors.Should().Contain(error3);
+        result.IsError.ShouldBeTrue();
+        result.Errors.Count.ShouldBe(3);
+        result.Errors.ShouldContain(error1);
+        result.Errors.ShouldContain(error2);
+        result.Errors.ShouldContain(error3);
     }
 
     [Fact]
     public void CombineAll_WhenErrorsArrayIsNull_ShouldThrowArgumentNullException()
     {
-        // Act
-        Action act = () => ErrorOrExtensions.CombineAll<int>(null!);
-
         // Assert
-        act.Should().ThrowExactly<ArgumentNullException>()
-           .And.ParamName.Should().Be("errorOrs");
+        var ex = Should.Throw<ArgumentNullException>(() => ErrorOrExtensions.CombineAll<int>(null!));
+        ex.ParamName.ShouldBe("errorOrs");
     }
 
     [Fact]
     public void CombineAll_WhenErrorsArrayIsEmpty_ShouldThrowArgumentException()
     {
-        // Act
-        Action act = () => ErrorOrExtensions.CombineAll(Array.Empty<ErrorOr<int>>());
-
         // Assert
-        act.Should().ThrowExactly<ArgumentException>()
-           .And.ParamName.Should().Be("errorOrs");
+        var ex = Should.Throw<ArgumentException>(() => ErrorOrExtensions.CombineAll(Array.Empty<ErrorOr<int>>()));
+        ex.ParamName.ShouldBe("errorOrs");
     }
 }

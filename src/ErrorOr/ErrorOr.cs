@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using TylerSoftware.ErrorOr.Errors;
 
-namespace ErrorOr;
+namespace TylerSoftware.ErrorOr;
 
 /// <summary>
 /// A discriminated union of errors or a value.

@@ -1,4 +1,6 @@
-namespace ErrorOr;
+using TylerSoftware.ErrorOr.Errors;
+
+namespace TylerSoftware.ErrorOr;
 
 /// <summary>
 /// Provides factory methods for creating instances of <see cref="ErrorOr{TValue}"/>.
