@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -19,8 +18,8 @@ public class ThenAsyncTests
             .ThenAsync(Convert.ToStringAsync);
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo("10");
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe("10");
     }
 
     [Fact]
@@ -37,7 +36,7 @@ public class ThenAsyncTests
             .ThenAsync(Convert.ToStringAsync);
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Should().BeEquivalentTo(errorOrString.FirstError);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.ShouldBe(errorOrString.FirstError);
     }
 }
