@@ -1,5 +1,4 @@
 using ErrorOr;
-using FluentAssertions;
 
 namespace Tests;
 
@@ -18,8 +17,8 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 3), Error.Failure());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Failure);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Failure);
     }
 
     [Fact]
@@ -34,8 +33,8 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 3), Error.Failure());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Failure);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Failure);
     }
 
     [Fact]
@@ -49,8 +48,8 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 10), Error.Failure());
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(5);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(5);
     }
 
     [Fact]
@@ -64,8 +63,8 @@ public class FailIfAsyncTests
             .FailIfAsync(str => Task.FromResult(str == string.Empty), Error.Failure());
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.NotFound);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.NotFound);
     }
 
     [Fact]
@@ -79,9 +78,9 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 3), (num) => Task.FromResult(Error.Failure(description: $"{num} is greater than 3.")));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Failure);
-        result.FirstError.Description.Should().Be("5 is greater than 3.");
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Failure);
+        result.FirstError.Description.ShouldBe("5 is greater than 3.");
     }
 
     [Fact]
@@ -96,9 +95,9 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 3), (num) => Task.FromResult(Error.Failure(description: $"{num} is greater than 3.")));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.Failure);
-        result.FirstError.Description.Should().Be("5 is greater than 3.");
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.Failure);
+        result.FirstError.Description.ShouldBe("5 is greater than 3.");
     }
 
     [Fact]
@@ -112,8 +111,8 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 10), (num) => Task.FromResult(Error.Failure(description: $"{num} is greater than 10.")));
 
         // Assert
-        result.IsError.Should().BeFalse();
-        result.Value.Should().Be(5);
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(5);
     }
 
     [Fact]
@@ -127,7 +126,7 @@ public class FailIfAsyncTests
             .FailIfAsync(num => Task.FromResult(num > 3), (num) => Task.FromResult(Error.Failure(description: $"{num} is greater than 3.")));
 
         // Assert
-        result.IsError.Should().BeTrue();
-        result.FirstError.Type.Should().Be(ErrorType.NotFound);
+        result.IsError.ShouldBeTrue();
+        result.FirstError.Type.ShouldBe(ErrorType.NotFound);
     }
 }
