@@ -34,7 +34,7 @@ jobs:
         run: dotnet test -c Release --no-build --verbosity normal
 
       - name: Package
-        run: dotnet pack -c Release --no-build src/ErrorOr.csproj
+        run: dotnet pack -c Release --no-build src/TylerSoftware.ErrorOr.csproj
 
       # Debug: Check if API key is available
       - name: Debug API Key

@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ErrorOr.csproj" />
+    <ProjectReference Include="..\..\src\TylerSoftware.ErrorOr.csproj" />
   </ItemGroup>
 
 </Project>
