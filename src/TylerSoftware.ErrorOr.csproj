@@ -56,8 +56,8 @@
   <!-- Package Repository -->
   <PropertyGroup>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/tmiller1995/error-or</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/tmiller1995/error-or</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Tyler-Software-Developer/error-or</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Tyler-Software-Developer/error-or</PackageProjectUrl>
   </PropertyGroup>
 
   <!-- Package Assets -->

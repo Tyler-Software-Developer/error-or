@@ -4,9 +4,9 @@
 
 [![NuGet](https://img.shields.io/nuget/v/TylerSoftware.ErrorOr.svg)](https://www.nuget.org/packages/TylerSoftware.ErrorOr)
 
-[![Build](https://github.com/tmiller1995/error-or/actions/workflows/build.yml/badge.svg)](https://github.com/tmiller1995/error-or/actions/workflows/build.yml) [![Publish](https://github.com/tmiller1995/error-or/actions/workflows/publish.yml/badge.svg)](https://github.com/tmiller1995/error-or/actions/workflows/publish.yml) [![codecov](https://codecov.io/github/tmiller1995/error-or/graph/badge.svg)](https://codecov.io/github/tmiller1995/error-or)
+[![Build](https://github.com/Tyler-Software-Developer/error-or/actions/workflows/build.yml/badge.svg)](https://github.com/Tyler-Software-Developer/error-or/actions/workflows/build.yml) [![Publish](https://github.com/Tyler-Software-Developer/error-or/actions/workflows/publish.yml/badge.svg)](https://github.com/Tyler-Software-Developer/error-or/actions/workflows/publish.yml) [![codecov](https://codecov.io/github/Tyler-Software-Developer/error-or/graph/badge.svg)](https://codecov.io/github/Tyler-Software-Developer/error-or)
 
-[![GitHub Stars](https://img.shields.io/github/stars/tmiller1995/error-or.svg)](https://github.com/tmiller1995/error-or/stargazers) [![GitHub license](https://img.shields.io/github/license/tmiller1995/error-or)](https://github.com/tmiller1995/error-or/blob/main/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/Tyler-Software-Developer/error-or.svg)](https://github.com/Tyler-Software-Developer/error-or/stargazers) [![GitHub license](https://img.shields.io/github/license/Tyler-Software-Developer/error-or)](https://github.com/Tyler-Software-Developer/error-or/blob/main/LICENSE)
 
 ---
 
@@ -989,6 +989,6 @@ If you have any questions, comments, or suggestions, please open an issue or cre
 
 # License 🪪
 
-This project is licensed under the terms of the [MIT](https://github.com/tmiller1995/error-or/blob/main/LICENSE) license.
+This project is licensed under the terms of the [MIT](https://github.com/Tyler-Software-Developer/error-or/blob/main/LICENSE) license.
 
 ---
