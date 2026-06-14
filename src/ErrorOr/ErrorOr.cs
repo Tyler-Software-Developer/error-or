@@ -65,6 +65,15 @@ public readonly partial record struct ErrorOr<TValue> : IErrorOr<TValue>
     public bool IsError => _errors is not null;
 
     /// <summary>
+    /// Gets a value indicating whether the state is a value (i.e. not an error).
+    /// </summary>
+    [MemberNotNullWhen(false, nameof(_errors))]
+    [MemberNotNullWhen(false, nameof(Errors))]
+    [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(true, nameof(_value))]
+    public bool IsSuccess => _errors is null;
+
+    /// <summary>
     /// Gets the list of errors. If the state is not error, the list will contain a single error representing the state.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown when no errors are present.</exception>
@@ -133,4 +142,11 @@ public readonly partial record struct ErrorOr<TValue> : IErrorOr<TValue>
     {
         return errors;
     }
+
+    /// <summary>
+    /// Returns an enumerator that iterates through the errors. When the state is a value, the enumerator is empty.
+    /// </summary>
+    /// <returns>An enumerator of <see cref="Error"/>.</returns>
+    /// <remarks>This method primarily exists to support collection expressions targeting the <see cref="IErrorOr"/> interfaces.</remarks>
+    public IEnumerator<Error> GetEnumerator() => ErrorsOrEmptyList.GetEnumerator();
 }

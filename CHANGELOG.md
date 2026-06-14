@@ -2,6 +2,65 @@
 
 All notable changes to this project are documented in this file.
 
+## [5.0.0] - 2026-06-14
+
+This release brings the library to full feature parity with upstream [`amantinband/error-or`](https://github.com/amantinband/error-or) **2.1.1** and modernizes the packaging and publishing pipeline. It is a major version because new members were added to the public `IErrorOr` interface and the `net9.0` target framework was dropped.
+
+### Breaking Changes
+
+- **Dropped `net9.0` target framework**: .NET 9 reached end of support in May 2026. The library now targets `netstandard2.0;net8.0;net10.0`. Projects targeting .NET 9 continue to work transparently by resolving the `net8.0` assembly.
+- **New `IErrorOr` interface members**: `IsSuccess`, `GetEnumerator()`, and an `IRecordable` base interface were added to `IErrorOr`. Code that *implements* `IErrorOr` directly must add these members. The built-in `ErrorOr<T>` already implements them, so consumers that only *use* `ErrorOr<T>` are unaffected.
+
+### Added
+
+- **`IsSuccess` property** on `ErrorOr<T>` and `IErrorOr` — the inverse of `IsError`. Based on [amantinband/error-or#159](https://github.com/amantinband/error-or/pull/159).
+- **`ThenEnsure` / `ThenEnsureAsync`** — run a validation that may produce errors while preserving the original value on success. Includes `Task<ErrorOr<T>>` extension variants.
+
+```csharp
+ErrorOr<int> result = value.ThenEnsure(v => v > 0 ? v : Error.Validation());
+```
+
+- **`Else` / `ElseAsync` overloads returning `ErrorOr<T>`** — recover from an error by returning a new `ErrorOr<T>` (value or errors). Includes `Task<ErrorOr<T>>` extension variants.
+- **`IEnumerable<Error>` overloads** for `ErrorOrFactory.From`, `ErrorOrFactory.FromAsync`, and `ToErrorOr`.
+- **Expanded `ToErrorOrAsync` family**: `Task<Error>`, `Task<List<Error>>`, `Task<Error[]>`, and `Task<IEnumerable<Error>>`.
+- **Expanded `FromAsync` family**: `Task<Error[]>` and `Task<IEnumerable<Error>>`.
+- **`GetEnumerator()`** on `ErrorOr<T>` / `IErrorOr` — enumerates the errors (empty when the state is a value).
+- **Recording subsystem** — `IRecordable`, `IRecordingSerializer<TOutput>`, and `ErrorOr<T>.GetRecording<TOutput>(...)` for serializing the value/errors without knowing the concrete type. Based on [amantinband/error-or#184](https://github.com/amantinband/error-or/pull/184), [#189](https://github.com/amantinband/error-or/pull/189).
+
+```csharp
+string recording = result.GetRecording(new MyJsonRecordingSerializer());
+```
+
+- **Collection-expression support for the interfaces** `IErrorOr<T>` and `IErrorOr` (in addition to `ErrorOr<T>`).
+
+### Changed / Infrastructure
+
+- **Trusted Publishing**: NuGet publishing migrated from a long-lived API key to OIDC Trusted Publishing (`NuGet/login@v1`) with short-lived tokens. Requires a Trusted Publishing policy on nuget.org and a `NUGET_USER` repository variable.
+- **Reproducible builds**: added `DotNet.ReproducibleBuilds`, explicit portable PDBs (`DebugType=portable`).
+- **Package validation**: enabled `EnablePackageValidation` with a `4.0.0` baseline; intentional breaks for this release are documented in `src/CompatibilitySuppressions.xml`.
+- **Central Package Management**: dependency versions consolidated in `Directory.Packages.props`.
+- **Dependency bumps**: `Microsoft.SourceLink.GitHub` 10.0.300, `Microsoft.NET.Test.Sdk` 18.6.0, `coverlet.collector` 10.0.1.
+
+### Notes
+
+- **`FromAsync` divergence from upstream**: our `ErrorOrFactory.FromAsync` overloads accept `Task<...>` inputs and await them, whereas upstream's `FromAsync` accepts non-`Task` inputs and wraps them in a `Task`. The synchronous `From` overloads are equivalent across both.
+- The aggregation API (`Combine`, `CombineAll`, `AppendErrors`) and `IErrorOr.ValueObject` remain available in this fork and have no upstream equivalent.
+
+---
+
+## [4.0.0] - 2026-04-11
+
+### Breaking Changes
+
+- **Namespace change**: the root namespace changed from `ErrorOr` to `TylerSoftware.ErrorOr` (errors live in `TylerSoftware.ErrorOr.Errors`, result types in `TylerSoftware.ErrorOr.Results`). Update your `using` directives accordingly.
+
+### Changed
+
+- **AOT/trimming hardening**: additional fixes so the library is fully Native AOT and trimming compatible under the new namespace.
+- **Test framework migration**: tests migrated from FluentAssertions to Shouldly.
+
+---
+
 ## [3.1.0] - 2026-01-15
 
 ### Added

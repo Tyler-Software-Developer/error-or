@@ -2,7 +2,7 @@
 
   <!-- Target Frameworks -->
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -20,6 +20,8 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
@@ -27,15 +29,21 @@
   <!-- Package Identity -->
   <PropertyGroup>
     <PackageId>TylerSoftware.ErrorOr</PackageId>
-    <Version>4.0.0</Version>
+    <Version>5.0.0</Version>
     <Authors>Tyler Miller</Authors>
     <Company>Tyler Software</Company>
     <Copyright>Copyright (c) Tyler Software 2026</Copyright>
   </PropertyGroup>
 
+  <!-- Package Validation (API/binary compatibility vs. the last published release) -->
+  <PropertyGroup>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>4.0.0</PackageValidationBaselineVersion>
+  </PropertyGroup>
+
   <!-- Package Description -->
   <PropertyGroup>
-    <Description>A simple, fluent discriminated union of an error or a result. Supports .NET Standard 2.0, .NET 8, .NET 9, and .NET 10 with full AOT and trimming compatibility.</Description>
+    <Description>A simple, fluent discriminated union of an error or a result. Supports .NET Standard 2.0, .NET 8, and .NET 10 with full AOT and trimming compatibility.</Description>
     <PackageTags>Result;Results;ErrorOr;Error;Handling;DiscriminatedUnion;Railway;Functional;Monad;DomainDriven</PackageTags>
     <PackageReleaseNotes>See CHANGELOG.md for release notes.</PackageReleaseNotes>
   </PropertyGroup>
@@ -76,16 +84,19 @@
     <!-- HashCode polyfill for netstandard2.0 -->
 
     <!-- Nullable reference types for older frameworks -->
-    <PackageReference Include="Nullable" Version="1.3.1">
+    <PackageReference Include="Nullable">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
     <!-- Source Link -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.201" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+
+    <!-- Reproducible builds -->
+    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Bcl.HashCode" />
   </ItemGroup>
 
 </Project>

@@ -36,4 +36,31 @@ public static class ErrorOrBuilder
         return new List<Error>(errors);
     }
 #endif
+
+    /// <summary>
+    /// Creates an <see cref="IErrorOr{TValue}"/> from a collection of errors.
+    /// This method enables collection expression syntax targeting <see cref="IErrorOr{TValue}"/>.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the underlying value.</typeparam>
+    /// <param name="errors">The span of errors.</param>
+    /// <returns>An <see cref="IErrorOr{TValue}"/> in error state with the provided errors.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="errors"/> is empty.</exception>
+#if NET8_0_OR_GREATER
+    public static IErrorOr<TValue> CreateIErrorOrValue<TValue>(ReadOnlySpan<Error> errors) => Create<TValue>(errors);
+#else
+    public static IErrorOr<TValue> CreateIErrorOrValue<TValue>(Error[] errors) => Create<TValue>(errors);
+#endif
+
+    /// <summary>
+    /// Creates an <see cref="IErrorOr"/> from a collection of errors.
+    /// This method enables collection expression syntax targeting <see cref="IErrorOr"/>.
+    /// </summary>
+    /// <param name="errors">The span of errors.</param>
+    /// <returns>An <see cref="IErrorOr"/> in error state with the provided errors.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="errors"/> is empty.</exception>
+#if NET8_0_OR_GREATER
+    public static IErrorOr CreateIErrorOr(ReadOnlySpan<Error> errors) => Create<object>(errors);
+#else
+    public static IErrorOr CreateIErrorOr(Error[] errors) => Create<object>(errors);
+#endif
 }

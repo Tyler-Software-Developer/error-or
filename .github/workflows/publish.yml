@@ -36,33 +36,23 @@ jobs:
       - name: Package
         run: dotnet pack -c Release --no-build src/TylerSoftware.ErrorOr.csproj
 
-      # Debug: Check if API key is available
-      - name: Debug API Key
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: |
-          if [ -z "$NUGET_API_KEY" ]; then
-            echo "::error::NUGET_API_KEY secret is empty or not set!"
-            exit 1
-          else
-            echo "✓ NUGET_API_KEY is set (length: ${#NUGET_API_KEY} characters)"
-          fi
-
       # List packages to publish
       - name: List packages
         run: |
           echo "Packages to publish:"
           ls -la ./artifacts/
 
-      # Publish using API Key
-      - name: Publish NuGet Package
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: |
-          dotnet nuget push ./artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+      # Exchange the GitHub OIDC token for a short-lived NuGet API key (Trusted Publishing).
+      # Requires a Trusted Publishing policy configured on nuget.org for this repo/workflow,
+      # and a repository variable NUGET_USER set to the nuget.org account username that owns the policy.
+      - name: NuGet login (Trusted Publishing)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ vars.NUGET_USER }}
 
-      - name: Publish Symbol Package
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      # Publish the package and its symbols using the short-lived API key
+      - name: Publish NuGet Package and Symbols
         run: |
-          dotnet nuget push ./artifacts/*.snupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push ./artifacts/*.nupkg --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push ./artifacts/*.snupkg --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

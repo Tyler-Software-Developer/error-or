@@ -22,7 +22,6 @@
 |-------------------|-----------|
 | .NET Standard 2.0 | Yes       |
 | .NET 8.0          | Yes       |
-| .NET 9.0          | Yes       |
 | .NET 10.0         | Yes       |
 
 **Features:**
@@ -47,6 +46,7 @@
   - [Using The `ToErrorOrAsync` Extension Method](#using-the-toerrororasync-extension-method)
 - [Properties](#properties)
   - [`IsError`](#iserror)
+  - [`IsSuccess`](#issuccess)
   - [`Value`](#value)
   - [`Errors`](#errors)
   - [`FirstError`](#firsterror)
@@ -67,6 +67,7 @@
     - [`Then`](#then-1)
     - [`ThenAsync`](#thenasync)
     - [`ThenDo` and `ThenDoAsync`](#thendo-and-thendoasync)
+    - [`ThenEnsure` and `ThenEnsureAsync`](#thenensure-and-thenensureasync)
     - [Mixing `Then`, `ThenDo`, `ThenAsync`, `ThenDoAsync`](#mixing-then-thendo-thenasync-thendoasync)
   - [`FailIf`](#failif)
   - [`Else`](#else)
@@ -77,6 +78,7 @@
 - [Error Aggregation](#error-aggregation)
   - [`Combine` and `CombineAll`](#combine-and-combineall)
   - [`AppendErrors`](#appenderrors)
+- [Recording (`GetRecording`)](#recording-getrecording)
 - [Error Types](#error-types)
   - [Built in error types](#built-in-error-types)
   - [Custom error types](#custom-error-types)
@@ -356,6 +358,19 @@ if (result.IsError)
 }
 ```
 
+## `IsSuccess`
+
+`IsSuccess` is the inverse of `IsError`. It is available on both `ErrorOr<T>` and the `IErrorOr` interface.
+
+```cs
+ErrorOr<int> result = User.Create();
+
+if (result.IsSuccess)
+{
+    Console.WriteLine(result.Value);
+}
+```
+
 ## `Value`
 
 ```cs
@@ -575,6 +590,26 @@ ErrorOr<string> foo = await result
     .ThenDo(val => $"The result is {val}");
 ```
 
+### `ThenEnsure` and `ThenEnsureAsync`
+
+`ThenEnsure` runs a validation function that returns an `ErrorOr<T>`. If the function returns errors, the chain fails with those errors; otherwise the **original** value is preserved (unlike `Then`, which replaces the value with the function's result).
+
+```cs
+ErrorOr<User> result = user
+    .ThenEnsure(u => u.Age >= 18 ? u : Error.Validation("User.UnderAge", "User must be 18 or older"))
+    .ThenEnsure(u => u.HasEmail ? u : Error.Validation("User.NoEmail", "User must have an email"));
+// On success, result.Value is still the original user.
+```
+
+`ThenEnsureAsync` is the asynchronous variant, and `Task<ErrorOr<T>>` extension overloads are provided for chaining.
+
+```cs
+ErrorOr<User> result = await user
+    .ThenEnsureAsync(u => _repository.IsUniqueAsync(u.Email)
+        .ToErrorOrAsync()
+        .Then(isUnique => isUnique ? u : Error.Conflict("User.DuplicateEmail", "Email already in use")));
+```
+
 ### Mixing `Then`, `ThenDo`, `ThenAsync`, `ThenDoAsync`
 
 You can mix and match `Then`, `ThenDo`, `ThenAsync`, `ThenDoAsync` methods.
@@ -745,6 +780,34 @@ ErrorOr<int> result = 42;
 ErrorOr<int> withErrors = result.AppendErrors(Error.Validation("Oops"));
 // withErrors.IsError == true
 // withErrors.Errors contains the validation error
+```
+
+# Recording (`GetRecording`)
+
+`GetRecording` produces a loggable/serializable representation of an `ErrorOr` without the caller needing to know the underlying value type. You provide an `IRecordingSerializer<TOutput>` that knows how to serialize either the value or the list of errors, and `GetRecording` invokes the correct one based on state.
+
+This is available on `ErrorOr<T>` and via the `IRecordable` interface (which `IErrorOr` implements), making it convenient for cross-cutting concerns like logging and auditing.
+
+```cs
+public sealed class JsonRecordingSerializer : IRecordingSerializer<string>
+{
+    public string SerializeValue<TValue>(TValue value) =>
+        JsonSerializer.Serialize(value);
+
+    public string SerializeErrors(List<Error> errors) =>
+        JsonSerializer.Serialize(errors.ConvertAll(e => new { e.Code, e.Description }));
+}
+```
+
+```cs
+ErrorOr<User> result = await GetUserAsync();
+
+// Serializes the value when successful, or the errors when not.
+string recording = result.GetRecording(new JsonRecordingSerializer());
+
+// Works through the type-less interface too:
+IRecordable recordable = result;
+string sameRecording = recordable.GetRecording(new JsonRecordingSerializer());
 ```
 
 # Error Types

@@ -73,7 +73,48 @@ var metadataError = Error.Validation(
     new Dictionary<string, object> { ["key"] = "value" });
 Console.WriteLine($"Test 10 - Metadata: {metadataError.Metadata?.Count ?? 0} entries");
 
+// Test 11: IsSuccess property
+Console.WriteLine($"Test 11 - IsSuccess: value={valueResult.IsSuccess}, error={errorResult.IsSuccess}");
+
+// Test 12: ThenEnsure
+ErrorOr<int> ensuredResult = valueResult.ThenEnsure(value => value > 0 ? value : Error.Validation("Negative", "Value is negative"));
+Console.WriteLine($"Test 12 - ThenEnsure: IsError={ensuredResult.IsError}");
+
+// Test 13: Else returning ErrorOr
+ErrorOr<int> elseErrorOrResult = errorResult.Else(_ => ErrorOrFactory.From(7));
+Console.WriteLine($"Test 13 - Else(ErrorOr): {elseErrorOrResult.Value}");
+
+// Test 14: GetEnumerator (foreach over errors)
+var enumeratedErrors = new List<Error>();
+foreach (Error error in errorResult)
+{
+    enumeratedErrors.Add(error);
+}
+
+Console.WriteLine($"Test 14 - GetEnumerator: enumerated {enumeratedErrors.Count} errors");
+
+// Test 15: From IEnumerable<Error>
+IEnumerable<Error> errorSequence = new[] { Error.Validation("E1", "first") };
+ErrorOr<int> fromEnumerable = ErrorOrFactory.From<int>(errorSequence);
+Console.WriteLine($"Test 15 - From(IEnumerable<Error>): IsError={fromEnumerable.IsError}");
+
+// Test 16: GetRecording (recording subsystem)
+var recording = valueResult.GetRecording(new AotRecordingSerializer());
+Console.WriteLine($"Test 16 - GetRecording: {recording}");
+
 Console.WriteLine("==============================");
 Console.WriteLine("All AOT compatibility tests passed!");
 
 return 0;
+
+/// <summary>
+/// A minimal <see cref="IRecordingSerializer{TOutput}"/> used to verify the recording subsystem under Native AOT.
+/// </summary>
+internal sealed class AotRecordingSerializer : IRecordingSerializer<string>
+{
+    /// <inheritdoc/>
+    public string SerializeValue<TValue>(TValue value) => $"value:{value}";
+
+    /// <inheritdoc/>
+    public string SerializeErrors(List<Error> errors) => $"errors:{errors.Count}";
+}
