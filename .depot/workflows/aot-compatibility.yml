@@ -1,0 +1,32 @@
+# Depot CI workflow.
+# NOTE: Depot CI sandboxes are Linux x86_64 only — Windows and macOS are not
+# available. The Windows/macOS AOT legs from the original GitHub Actions matrix
+# were dropped in the move to Depot CI; only linux-x64 native AOT is verified here.
+
+name: AOT Compatibility
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    branches: [main]
+jobs:
+  aot-test:
+    runs-on: depot-ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install Native AOT prerequisites
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+      - name: Restore dependencies
+        run: dotnet restore tests/AotCompatibility/AotCompatibility.csproj
+      - name: Build AOT
+        run: dotnet build tests/AotCompatibility/AotCompatibility.csproj -c Release
+      - name: Publish Native AOT
+        run: dotnet publish tests/AotCompatibility/AotCompatibility.csproj -c Release -r linux-x64 --self-contained -o ./aot-publish
+      - name: Run AOT Binary
+        run: ./aot-publish/AotCompatibility
+      - name: Report Binary Size
+        run: ls -lh ./aot-publish/AotCompatibility
