@@ -11,14 +11,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [depot-ubuntu-latest, depot-windows-latest, depot-macos-latest]
         include:
-          - os: ubuntu-latest
+          - os: depot-ubuntu-latest
             rid: linux-x64
-          - os: windows-latest
+          - os: depot-windows-latest
             rid: win-x64
-          - os: macos-latest
-            rid: osx-x64
+          - os: depot-macos-latest
+            rid: osx-arm64
 
     runs-on: ${{ matrix.os }}
 
