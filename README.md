@@ -24,6 +24,8 @@
 | .NET 8.0          | Yes       |
 | .NET 10.0         | Yes       |
 
+> **.NET 9 support was dropped in v5.0.0.** .NET 9 reached end of support in May 2026, so it is no longer a target framework. Projects still targeting .NET 9 can continue to consume the package via the .NET 8.0 assembly.
+
 **Features:**
 - Full AOT (Ahead-of-Time) compilation support
 - Trimming compatible
