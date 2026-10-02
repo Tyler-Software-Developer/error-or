@@ -18,7 +18,7 @@ public readonly partial record struct ErrorOr<TValue>
     {
         if (!IsError)
         {
-            return _value.GetHashCode();
+            return EqualityComparer<TValue>.Default.GetHashCode(_value!);
         }
 
 #pragma warning disable SA1129 // HashCode needs to be instantiated this way

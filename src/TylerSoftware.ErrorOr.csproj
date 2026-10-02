@@ -29,7 +29,7 @@
   <!-- Package Identity -->
   <PropertyGroup>
     <PackageId>TylerSoftware.ErrorOr</PackageId>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <Authors>Tyler Miller</Authors>
     <Company>Tyler Software</Company>
     <Copyright>Copyright (c) Tyler Software 2026</Copyright>
@@ -71,6 +71,7 @@
   <ItemGroup>
     <None Include="../assets/icon-square.png" Pack="true" Visible="false" PackagePath="" />
     <None Include="../README.md" Pack="true" PackagePath="" />
+    <None Include="../CHANGELOG.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <!-- Code Style -->
