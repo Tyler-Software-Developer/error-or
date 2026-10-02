@@ -23,7 +23,15 @@ public static class ErrorOrBuilder
             throw new ArgumentException("Cannot create an TylerSoftware.ErrorOr<TValue> from an empty collection of errors. Provide at least one error.", nameof(errors));
         }
 
-        return new List<Error>(errors.ToArray());
+        // Element-wise Add, not AddRange(span): collection expressions pass a stack buffer, and bulk-copying
+        // reference-containing structs out of the stack takes the slow write-barrier path (~5x slower here).
+        var list = new List<Error>(errors.Length);
+        foreach (var error in errors)
+        {
+            list.Add(error);
+        }
+
+        return list;
     }
 #else
     public static ErrorOr<TValue> Create<TValue>(Error[] errors)

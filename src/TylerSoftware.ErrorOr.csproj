@@ -29,7 +29,7 @@
   <!-- Package Identity -->
   <PropertyGroup>
     <PackageId>TylerSoftware.ErrorOr</PackageId>
-    <Version>5.0.1</Version>
+    <Version>5.1.0</Version>
     <Authors>Tyler Miller</Authors>
     <Company>Tyler Software</Company>
     <Copyright>Copyright (c) Tyler Software 2026</Copyright>
