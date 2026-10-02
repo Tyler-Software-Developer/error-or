@@ -5,6 +5,7 @@
 **/obj
 **/bin
 **/artifacts
+**/BenchmarkDotNet.Artifacts
 **/TestResults
 
 .fake
