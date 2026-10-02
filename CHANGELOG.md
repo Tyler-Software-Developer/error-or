@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented in this file.
 
+## [5.0.1] - 2026-10-01
+
+Syncs with upstream [`error-or/error-or`](https://github.com/error-or/error-or) `main` after 2.1.1. No public API changes.
+
+### Fixed
+
+- `ErrorOr<T>.GetHashCode()` now uses `EqualityComparer<T>.Default` (upstream [#212](https://github.com/error-or/error-or/pull/212)).
+- `ErrorsOrEmptyList` returns a new empty list on each call instead of a shared mutable instance, so mutating it can no longer leak into other results.
+
+### Changed
+
+- `CHANGELOG.md` is now included in the NuGet package (upstream [#202](https://github.com/error-or/error-or/pull/202)).
+- Bumped `Microsoft.SourceLink.GitHub` to 10.0.303 (build-only; fixes [CVE-2026-62900](https://github.com/advisories/GHSA-23fw-v26w-5fgq) in `Microsoft.Build.Tasks.Git`).
+- Bumped `Microsoft.NET.Test.Sdk` to 18.7.0 (test-only).
+
 ## [5.0.0] - 2026-06-14
 
 This release brings the library to full feature parity with upstream [`amantinband/error-or`](https://github.com/amantinband/error-or) **2.1.1** and modernizes the packaging and publishing pipeline. It is a major version because new members were added to the public `IErrorOr` interface and the `net9.0` target framework was dropped.
