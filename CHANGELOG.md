@@ -2,6 +2,35 @@
 
 All notable changes to this project are documented in this file.
 
+## [5.1.0] - 2026-10-02
+
+Performance pass targeting `net8.0` and `net10.0`, plus a `ToString()` fix. Binary compatible; see the expression-tree note below for the one source-level caveat.
+
+### Added
+
+- **`params ReadOnlySpan<T>` overloads** (`net8.0`+) for `ErrorOrExtensions.Combine`, `CombineAll`, and `AppendErrors`. Callers that pass arguments individually (`Combine(a, b, c)`) bind to these after recompiling, so no `params` array is allocated. The `params T[]` overloads remain and are used on `netstandard2.0`.
+- **Expression-tree caveat:** inside an expression tree, an expanded call such as `Combine(a, b)` now binds to the `ReadOnlySpan<T>` overload and fails to compile (CS8640/CS9226), the same trade-off .NET 9 made for its own `params` span overloads. Pass an explicit array (`Combine(new[] { a, b })`) to keep using the array overload there.
+
+### Fixed
+
+- `ErrorOr<T>.ToString()` threw `InvalidOperationException` in both states, because the compiler-generated record printer read the guarded `Errors`/`Value`/`FirstError` properties. It now prints `ErrorOr { IsError = False, Value = 5 }` or `ErrorOr { IsError = True, Errors = [...] }`.
+
+### Performance
+
+Measured with BenchmarkDotNet 0.15.8 on .NET 8.0 and .NET 10.0 (x64):
+
+| Scenario | .NET 8 before → after | .NET 10 before → after |
+|---|---|---|
+| `Combine(a, b, c)`, all values | 11.6 ns / 104 B → 2.1 ns / 0 B | 13.1 ns / 104 B → 1.8 ns / 0 B |
+| `CombineAll(a, b, c)`, all values | 21.7 ns / 176 B → 10.2 ns / 72 B | 23.0 ns / 176 B → 9.8 ns / 72 B |
+| `AppendErrors(e1, e2)` | 44.8 ns / 240 B → 24.8 ns / 152 B | 39.1 ns / 240 B → 29.9 ns / 152 B |
+| `ErrorOr<int> r = [e1, e2];` | 28.3 ns / 208 B → 16.7 ns / 120 B | 120.6 ns / 208 B → 17.8 ns / 120 B |
+| `foreach` over a value-state `ErrorOr` | 10.9 ns / 96 B → 2.2 ns / 0 B | 2.2 ns / 32 B → 0.5 ns / 0 B |
+
+- `Combine` / `CombineAll` allocate the error list only when an error is present; `CombineAll` allocates its (presized) value list only when a value is present.
+- `GetEnumerator()` on a value-state result returns the cached empty-array enumerator instead of allocating an empty list.
+- The collection-expression builder no longer allocates an intermediate array. It and the span `AppendErrors` copy element-wise, because bulk-copying `Error` structs from a stack buffer (what collection expressions and `params` spans pass) goes through a write-barrier path that measured 5-10x slower.
+
 ## [5.0.1] - 2026-10-01
 
 Syncs with upstream [`error-or/error-or`](https://github.com/error-or/error-or) `main` after 2.1.1. No public API changes.

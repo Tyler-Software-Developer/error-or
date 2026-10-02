@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Text;
 using TylerSoftware.ErrorOr.Errors;
 
 namespace TylerSoftware.ErrorOr;
@@ -148,5 +149,30 @@ public readonly partial record struct ErrorOr<TValue> : IErrorOr<TValue>
     /// </summary>
     /// <returns>An enumerator of <see cref="Error"/>.</returns>
     /// <remarks>This method primarily exists to support collection expressions targeting the <see cref="IErrorOr"/> interfaces.</remarks>
-    public IEnumerator<Error> GetEnumerator() => ErrorsOrEmptyList.GetEnumerator();
+    public IEnumerator<Error> GetEnumerator() =>
+        IsError ? _errors.GetEnumerator() : ((IEnumerable<Error>)Array.Empty<Error>()).GetEnumerator();
+
+    // Replaces the compiler-generated record members, which read Errors/Value/FirstError and so always threw.
+    private bool PrintMembers(StringBuilder builder)
+    {
+        if (!IsError)
+        {
+            builder.Append("IsError = False, Value = ").Append(_value);
+            return true;
+        }
+
+        builder.Append("IsError = True, Errors = [");
+        for (var i = 0; i < _errors.Count; i++)
+        {
+            if (i > 0)
+            {
+                builder.Append(", ");
+            }
+
+            builder.Append(_errors[i].ToString());
+        }
+
+        builder.Append(']');
+        return true;
+    }
 }
