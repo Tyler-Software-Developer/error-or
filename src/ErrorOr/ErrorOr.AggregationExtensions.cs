@@ -214,7 +214,7 @@ public static partial class ErrorOrExtensions
         }
 
         List<Error>? allErrors = null;
-        var allValues = new List<TValue>(errorOrs.Length);
+        List<TValue>? allValues = null;
 
         foreach (var errorOr in errorOrs)
         {
@@ -224,11 +224,11 @@ public static partial class ErrorOrExtensions
             }
             else
             {
-                allValues.Add(errorOr.Value);
+                (allValues ??= new List<TValue>(errorOrs.Length)).Add(errorOr.Value);
             }
         }
 
-        return allErrors is not null ? allErrors : allValues;
+        return allErrors is not null ? allErrors : allValues!;
 #endif
     }
 
@@ -250,7 +250,7 @@ public static partial class ErrorOrExtensions
         }
 
         List<Error>? allErrors = null;
-        var allValues = new List<TValue>(errorOrs.Length);
+        List<TValue>? allValues = null;
 
         foreach (var errorOr in errorOrs)
         {
@@ -260,11 +260,11 @@ public static partial class ErrorOrExtensions
             }
             else
             {
-                allValues.Add(errorOr.Value);
+                (allValues ??= new List<TValue>(errorOrs.Length)).Add(errorOr.Value);
             }
         }
 
-        return allErrors is not null ? allErrors : allValues;
+        return allErrors is not null ? allErrors : allValues!;
     }
 #endif
 }
